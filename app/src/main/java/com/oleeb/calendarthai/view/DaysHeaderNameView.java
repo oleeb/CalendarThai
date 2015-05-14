@@ -16,8 +16,8 @@ public class DaysHeaderNameView {
         RemoteViews headerRowRv = new RemoteViews(context.getPackageName(), R.layout.row_header);
         for(String day : daysName) {
             RemoteViews dayRv = new RemoteViews(context.getPackageName(), R.layout.cell_header);
-            dayRv.setTextViewText(android.R.id.text1, day);
-            headerRowRv.addView(R.id.row_container, dayRv);
+            dayRv.setTextViewText(R.id.tvDayName, day);
+            headerRowRv.addView(R.id.row_head_container, dayRv);
         }
         return headerRowRv;
     }

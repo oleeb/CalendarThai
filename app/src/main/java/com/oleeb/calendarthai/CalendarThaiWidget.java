@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -106,6 +107,7 @@ public class CalendarThaiWidget extends AppWidgetProvider {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void drawWidget(Context context, int appWidgetId) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        Resources rs = Resources.getSystem();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
         Calendar calendar = Calendar.getInstance();

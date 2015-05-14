@@ -17,7 +17,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/background_calendar">
 
     <LinearLayout
         android:id="@+id/month_bar"
@@ -29,7 +30,7 @@
         <ImageButton
             android:id="@+id/prev_month_button"
             style="?android:borderlessButtonStyle"
-            android:layout_width="56dp"
+            android:layout_width="56sp"
             android:layout_height="match_parent"
             android:contentDescription="@string/previous_month"
             android:src="@drawable/ic_previous_month" />
@@ -43,12 +44,13 @@
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
             android:textColor="@color/foreground_full"
+            android:textStyle="bold"
             android:textSize="22sp" />
 
         <ImageButton
             android:id="@+id/next_month_button"
             style="?android:borderlessButtonStyle"
-            android:layout_width="56dp"
+            android:layout_width="56sp"
             android:layout_height="match_parent"
             android:contentDescription="@string/next_month"
             android:src="@drawable/ic_next_month" />

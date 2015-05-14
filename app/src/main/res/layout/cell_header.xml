@@ -13,8 +13,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layRowDayNameContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1">
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/CalendarCell"
-    android:textAllCaps="true"
-    android:textColor="@color/foreground_full"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvDayName"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textSize="20sp"/>
+</RelativeLayout>
