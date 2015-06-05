@@ -1,19 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.oleeb.calendarthai">
+    package="com.oleeb.calendarthai"
+    android:versionCode="@string/code_version"
+    android:versionName="@string/app_version" >
 
     <application
-        android:label="@string/app_name"
-        android:icon="@mipmap/ic_launcher"
-        android:allowBackup="true">
-
-        <receiver android:name=".CalendarThaiWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info" />
-        </receiver>
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
 
         <provider
             android:name=".holiday.HolidayProvider"
@@ -21,6 +15,31 @@
         <provider
             android:name=".buddhamoonphase.BuddhaMoonPhaseProvider"
             android:authorities="com.oleeb.calendarthai.buddhamoonphase.BuddhaMoonPhaseProvider" />
+
+        <receiver android:name=".CalendarThaiWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.oleeb.calendarthai.action.ACTION_SETTING" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/calendarthai_widget_info" />
+        </receiver>
+<!--
+        <activity
+            android:name=".CalendarThaiSettingsActivity"
+            android:theme="@style/CalendarThaiTheme" >
+        </activity>
+-->
+        <activity
+            android:name=".CalendarThaiSettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 

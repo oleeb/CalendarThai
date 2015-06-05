@@ -13,17 +13,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layRowDayNameContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:layout_weight="1">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvDayName"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="20sp"/>
-</RelativeLayout>
+        android:gravity="center"
+        android:textColor="@color/day_header_name"
+        android:textSize="18sp"/>
+</LinearLayout>

@@ -2,8 +2,10 @@ package com.oleeb.calendarthai.dao;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.util.Log;
 
+import com.oleeb.calendarthai.action.CalendarThaiAction;
 import com.oleeb.calendarthai.dto.CalendarCurrent;
 import com.oleeb.calendarthai.dto.Days;
 import com.oleeb.calendarthai.dto.CalendarOfMonthDto;
@@ -119,24 +121,26 @@ public class CalendarOfMonthDao {
                         && (mCalendar.get(Calendar.DAY_OF_YEAR) == CalendarCurrent.getCurrentDay());
                 days = new Days();
                 days.setTime(mCalendar.getTimeInMillis());
-                days.data.put(Days.YEAR, mCalendar.get(Calendar.YEAR));
-                days.data.put(Days.MONTH, mCalendar.get(Calendar.MONTH));
-                days.data.put(Days.DAY, mCalendar.get(Calendar.DAY_OF_MONTH));
+                days.data.putInt(CalendarThaiAction.YEAR, mCalendar.get(Calendar.YEAR));
+                days.data.putInt(CalendarThaiAction.MONTH, mCalendar.get(Calendar.MONTH));
+                days.data.putInt(CalendarThaiAction.DAY, mCalendar.get(Calendar.DAY_OF_MONTH));
+
+                days.data.putInt(CalendarThaiAction.DAY_IN_WEEK, day);
 
                 if(isToday) {
-                    days.data.put(Days.TO_DAY,true); // to day
+                    days.data.putBoolean(CalendarThaiAction.TO_DAY, true); // to day
                 }else{
-                    days.data.put(Days.TO_DAY,false);
+                    days.data.putBoolean(CalendarThaiAction.TO_DAY, false);
                 }
 
                 if(inMonth){
-                    days.data.put(Days.TO_MONTH,true); // in month
+                    days.data.putBoolean(CalendarThaiAction.TO_MONTH, true); // in month
                 }else{
-                    days.data.put(Days.TO_MONTH,false); // other
+                    days.data.putBoolean(CalendarThaiAction.TO_MONTH, false); // other
                 }
 
                 DataOfDayDao daysAdapter = new DataOfDayDao(mContext);
-                Map<Object, Object> mapDays = daysAdapter.getData(days);
+                Bundle mapDays = daysAdapter.getData(days);
 
                 if(mapDays != null){
                     days.data.putAll(mapDays);

@@ -15,11 +15,8 @@
   -->
 
 <resources>
-    <style name="CalendarCell">
-        <item name="android:id">@android:id/text1</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/foreground_full</item>
-        <item name="android:textSize">22sp</item>
+    <style name="CalendarThaiTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/MyActionBarTheme</item>
+        <item name="android:actionMenuTextColor">@color/smoke_white</item>
     </style>
 </resources>

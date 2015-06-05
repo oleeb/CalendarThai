@@ -2,7 +2,9 @@ package com.oleeb.calendarthai.dao;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 
+import com.oleeb.calendarthai.action.CalendarThaiAction;
 import com.oleeb.calendarthai.view.AbstractDaysAdapter;
 import com.oleeb.calendarthai.buddhamoonphase.CalculateBuddhaMoonPhase;
 import com.oleeb.calendarthai.dto.Days;
@@ -10,7 +12,6 @@ import com.oleeb.calendarthai.holiday.Holiday;
 import com.oleeb.calendarthai.holiday.HolidayProvider;
 
 import java.text.SimpleDateFormat;
-import java.util.Map;
 
 /**
  * Created by OLEEB on 6/27/2014.
@@ -23,7 +24,7 @@ public class DataOfDayDao extends AbstractDaysAdapter {
     }
 
     @Override
-    public Map<Object, Object> getData(Days days) {
+    public Bundle getData(Days days) {
         this.days = days;
         setBuddhaMoonPhase();
         setHoliday();
@@ -40,11 +41,11 @@ public class DataOfDayDao extends AbstractDaysAdapter {
 
         /***********Buddha Moon Phase Day***************/
         if(buddhaMP != null) {
-            this.days.data.put(Days.WAXING,buddhaMP[0]);
-            this.days.data.put(Days.WAXING_DAY,buddhaMP[1]);
-            this.days.data.put(Days.WAXING_MONTH_1,buddhaMP[2]);
-            this.days.data.put(Days.WAXING_MONTH_2,buddhaMP[3]);
-            this.days.data.put(Days.WAXING_WANPRA, buddhaMP[4]);
+            this.days.data.putString(CalendarThaiAction.WAXING, (String) buddhaMP[0]);
+            this.days.data.putInt(CalendarThaiAction.WAXING_DAY, (Integer) buddhaMP[1]);
+            this.days.data.putInt(CalendarThaiAction.WAXING_MONTH_1, (Integer)buddhaMP[2]);
+            this.days.data.putString(CalendarThaiAction.WAXING_MONTH_2, (String)buddhaMP[3]);
+            this.days.data.putBoolean(CalendarThaiAction.WAXING_WANPRA, (Boolean) buddhaMP[4]);
         }
     }
 
@@ -61,7 +62,7 @@ public class DataOfDayDao extends AbstractDaysAdapter {
                 }, null);
         if(cursor != null){
             if(cursor.moveToFirst()) {
-                this.days.data.put(Days.HOLIDAY, cursor.getString(cursor.getColumnIndex(Holiday.COL_DESC)));
+                this.days.data.putString(CalendarThaiAction.HOLIDAY, cursor.getString(cursor.getColumnIndex(Holiday.COL_DESC)));
             }
             cursor.close();
         }

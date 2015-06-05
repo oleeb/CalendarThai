@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings">
+        <SwitchPreference
+            android:key="show_img_wanpra"
+            android:title="@string/title_show_img_wanpra"
+            android:defaultValue="true"/>
+        <SwitchPreference
+            android:key="show_txt_wax"
+            android:title="@string/title_show_txt_wax"
+            android:defaultValue="true"/>
+        <SwitchPreference
+            android:key="show_txt_holiday"
+            android:title="@string/title_show_txt_holiday"
+            android:defaultValue="true"/>
+        <com.oleeb.calendarthai.colorpicker.ColorPickerPreference
+            android:key="background_color"
+            android:title="@string/title_background_color"
+            android:defaultValue="@integer/BACKGROUND_CALENDAR"
+            alphaSlider="true" />
+        <com.oleeb.calendarthai.colorpicker.ColorPickerPreference
+            android:key="to_day_color"
+            android:title="@string/title_to_day_color"
+            android:defaultValue="@integer/TODAY"
+            alphaSlider="true" />
+        <com.oleeb.calendarthai.colorpicker.ColorPickerPreference
+            android:key="to_day_backuground_color"
+            android:title="@string/title_to_day_backgroundcolor"
+            android:defaultValue="@integer/COLOR_BLACK"
+            alphaSlider="true" />
+        <com.oleeb.calendarthai.colorpicker.ColorPickerPreference
+            android:key="holiday_color"
+            android:title="@string/title_holiday_color"
+            android:defaultValue="@integer/DAY_IN_HOLIDAY"
+            alphaSlider="true" />
+        <com.oleeb.calendarthai.colorpicker.ColorPickerPreference
+            android:key="to_month_color"
+            android:title="@string/title_to_month_color"
+            android:defaultValue="@integer/DAY_IN_MONTH"
+            alphaSlider="true" />
+        <com.oleeb.calendarthai.colorpicker.ColorPickerPreference
+            android:key="other_month_color"
+            android:title="@string/title_other_month_color"
+            android:defaultValue="@integer/DAY_OTHER_MONTH"
+            alphaSlider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/about_settings">
+        <Preference
+            android:title="@string/title_version"
+            android:summary="@string/app_version" />
+    </PreferenceCategory>
+</PreferenceScreen>

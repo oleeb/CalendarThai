@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <integer name="COLOR_BLACK">0xff000000</integer>
+    <integer name="COLOR_GREEN">0xff00ff00</integer>
+    <integer name="BACKGROUND_CALENDAR">0x60000000</integer>
+    <integer name="DAY_HEADER_NAME">0xffffffff</integer>
+    <integer name="DAY_IN_MONTH">0xffffffff</integer>
+    <integer name="DAY_IN_HOLIDAY">0xffff0000</integer>
+    <integer name="DAY_OTHER_MONTH">0x806d6d6d</integer>
+    <integer name="TODAY">0xff0000ff</integer>
+    <integer name="TODAY_BACKGROUND">0xffffffff</integer>
+</resources>

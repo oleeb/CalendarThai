@@ -16,7 +16,7 @@
 
 <resources>
     <color name="background_calendar">#2fff</color>
-    <color name="day">#ffffffff</color>
+    <color name="day_header_name">#ffffffff</color>
     <color name="day_in_month">#ffffffff</color>
     <color name="day_in_holiday">#fff00000</color>
     <color name="day_other_month">#816d6d6d</color>

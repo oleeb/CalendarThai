@@ -2,6 +2,7 @@ package com.oleeb.calendarthai.buddhamoonphase;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -55,8 +56,8 @@ public class CalculateBuddhaMoonPhase {
 //        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCBeginDate:"+sCBeginDate.getTime());
 //        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCEndDate:"+sCEndDate.getTime());
 //        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCCurentDate:"+sCCurentDate.getTime());
-//        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() countDay:"+countDay);
-//        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() data:"+data[1]+","+data[3]);
+//        Log.d("CalculateBuddhaMoonPhase countDay:",""+countDay);
+//        Log.d("CalculateBuddhaMoonPhase data:",data[1]+","+data[3]);
         return data;
     }
 
@@ -95,7 +96,12 @@ public class CalculateBuddhaMoonPhase {
         if(sCBeginDate.get(Calendar.YEAR) == sCCurentDate.get(Calendar.YEAR)) {
             countDayBetween = sCCurentDate.get(Calendar.DAY_OF_YEAR) - sCBeginDate.get(Calendar.DAY_OF_YEAR);
         }else if(sCBeginDate.get(Calendar.YEAR) < sCCurentDate.get(Calendar.YEAR)){
-            countDayBetween  = (sCBeginDate.getActualMaximum(Calendar.DAY_OF_YEAR) - sCBeginDate.get(Calendar.DAY_OF_YEAR)) + sCCurentDate.get(Calendar.DAY_OF_YEAR);
+            int dayOfyear = 0;
+            while (sCBeginDate.get(Calendar.YEAR) < sCCurentDate.get(Calendar.YEAR)){
+                dayOfyear +=sCCurentDate.get(Calendar.DAY_OF_YEAR);
+                sCCurentDate.add(Calendar.YEAR,-1);
+            }
+            countDayBetween  = (sCBeginDate.getActualMaximum(Calendar.DAY_OF_YEAR) - sCBeginDate.get(Calendar.DAY_OF_YEAR)) + dayOfyear;
         }
         return ++countDayBetween;
     }
@@ -109,7 +115,7 @@ public class CalculateBuddhaMoonPhase {
         for(;i < lunarMonth; i++){
             ++month;
             if(month%2 == 0 || ((sPhaseOfYaer == 2 && i == 6) || (sPhaseOfYaer == 3 && i == 8))){
-                if((sPhaseOfYaer == 3 && i==9)) --month;
+                if((sPhaseOfYaer == 3 && i==8)) --month;
                 if(countDays>SDAY30) {
                     countDays -= SDAY30;
                 }else{
@@ -118,7 +124,7 @@ public class CalculateBuddhaMoonPhase {
                         sData[0] = SWANING;
                         sData[1] = waning;
                         sData[2] = month;
-                        sData[3] = ((sPhaseOfYaer == 3 && i==9))?String.valueOf(month)+"-"+String.valueOf(month):String.valueOf(month);
+                        sData[3] = ((sPhaseOfYaer == 3 && i==8))?String.valueOf(month)+"-"+String.valueOf(month):String.valueOf(month);
                         if(waning == 8 || waning == 15) {
                             sData[4] = true;
                         }else{
@@ -128,7 +134,7 @@ public class CalculateBuddhaMoonPhase {
                         sData[0] = SWAXING;
                         sData[1] = countDays;
                         sData[2] = month;
-                        sData[3] = ((sPhaseOfYaer == 3 && i==9))?String.valueOf(month)+"-"+String.valueOf(month):String.valueOf(month);
+                        sData[3] = ((sPhaseOfYaer == 3 && i==8))?String.valueOf(month)+"-"+String.valueOf(month):String.valueOf(month);
                         if(countDays == 8 || countDays == 15) {
                             sData[4] = true;
                         }else{
@@ -146,7 +152,7 @@ public class CalculateBuddhaMoonPhase {
                         sData[0] = SWANING;
                         sData[1] = waning;
                         sData[2] = month;
-                        sData[3] = month;
+                        sData[3] = String.valueOf(month);
                         if(waning == 8 || waning == 14) {
                             sData[4] = true;
                         }else{
@@ -156,7 +162,7 @@ public class CalculateBuddhaMoonPhase {
                         sData[0] = SWAXING;
                         sData[1] = countDays;
                         sData[2] = month;
-                        sData[3] = month;
+                        sData[3] = String.valueOf(month);
                         if(countDays == 8 || countDays == 15) {
                             sData[4] = true;
                         }else{
