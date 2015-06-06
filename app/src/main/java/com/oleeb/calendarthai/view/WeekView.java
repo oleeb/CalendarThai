@@ -79,7 +79,9 @@ public class WeekView {
                 rowDayRv.setTextColor(R.id.tvWax, sharedPrefs.getInt(CalendarThaiAction.TO_MONTH_COLOR, R.integer.DAY_IN_MONTH));
                 //in WanPhra
                 if (data.getBoolean(CalendarThaiAction.WAXING_WANPRA)) {
+                    rowDayRv.setImageViewResource(R.id.iv_wanpra, R.drawable.ic_wanpra);
                     rowDayRv.setViewVisibility(R.id.iv_wanpra, View.VISIBLE);
+
                 }
             }
         }else{

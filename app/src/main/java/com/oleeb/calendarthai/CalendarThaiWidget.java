@@ -189,8 +189,11 @@ public class CalendarThaiWidget extends AppWidgetProvider {
         rowDayRv.setTextViewTextSize(R.id.tvDay, TypedValue.COMPLEX_UNIT_SP, 100);
         rowDayRv.setTextViewTextSize(R.id.tvWax, TypedValue.COMPLEX_UNIT_SP, 24);
         rowDayRv.setTextViewTextSize(R.id.tvHoliday, TypedValue.COMPLEX_UNIT_SP, 28);
-        //rowDayRv.sets
-        //rowDayRv.setImageViewResource(R.id.iv_wanpra, R.drawable.iv_buddha);
+
+        if (data.getBoolean(CalendarThaiAction.WAXING_WANPRA)) {
+            rowDayRv.setImageViewResource(R.id.iv_wanpra, R.drawable.ic_wanpra_xxhdpi);
+            rowDayRv.setViewVisibility(R.id.iv_wanpra, View.VISIBLE);
+        }
 
         rv.setOnClickPendingIntent(R.id.calendar,
                 PendingIntent.getBroadcast(context, 0,
