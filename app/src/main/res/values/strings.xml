@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CalendarThai</string>
     <string name="app_version">1</string>
-    <string name="code_version">1</string>
+    <string name="code_version">1.1</string>
     <string name="database_version">1</string>
 
     <string name="previous_month">Previous month</string>
