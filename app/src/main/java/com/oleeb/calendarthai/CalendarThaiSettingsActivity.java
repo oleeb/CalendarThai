@@ -23,7 +23,11 @@ public class CalendarThaiSettingsActivity extends PreferenceActivity  implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("CalendarThai Settings");
-        addPreferencesFromResource(R.xml.calendarthai_settings);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            addPreferencesFromResource(R.xml.calendarthai_settings);
+        }else{
+            addPreferencesFromResource(R.xml.calendarthai_settings_v8);
+        }
     }
 
     @Override
@@ -33,6 +37,7 @@ public class CalendarThaiSettingsActivity extends PreferenceActivity  implements
         return true;
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items

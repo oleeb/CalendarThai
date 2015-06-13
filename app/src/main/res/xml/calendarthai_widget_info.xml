@@ -16,11 +16,11 @@
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/loading"
-    android:minHeight="150dp"
-    android:minResizeHeight="150dp"
-    android:minResizeWidth="180dp"
-    android:minWidth="180dp"
-    android:previewImage="@drawable/widget_preview"
+    android:minHeight="180dp"
+    android:minResizeHeight="180dp"
+    android:minResizeWidth="250dp"
+    android:minWidth="250dp"
+    android:previewImage="@mipmap/widget_preview"
     android:resizeMode="vertical|horizontal"
-    android:updatePeriodMillis="1800000"
+    android:updatePeriodMillis="2000000"
     android:widgetCategory="keyguard|home_screen" />

@@ -36,9 +36,11 @@ public class CalendarThaiAction {
     public static final String TO_DAY_BACKGROUND_COLOR = "to_day_backuground_color";
     public static final String TO_DAY_COLOR = "to_day_color";
     public static final String SHOW_TXT_HOLIDAY = "show_txt_holiday";
+    public static final String TXT_HOLIDAY_COLOR = "txt_holiday_color";
+
     public static final String HOLIDAY_COLOR = "holiday_color";
     public static final String TO_MONTH_COLOR = "to_month_color";
-    public static final String SHOW_IMG_WANPRA = "show_img_wanpra";
+    public static final String SHOW_WANPRA = "show_wanpra";
     public static final String OTHER_MONTH_COLOR = "other_month_color";
     public static final String BACKGROUND_COLOR = "background_color";
 

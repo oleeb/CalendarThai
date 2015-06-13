@@ -8,6 +8,7 @@ import java.util.Locale;
  */
 public class CalendarCurrent {
     public static final String[] DAYNAMESTH = {"อา","จ","อ","พ","พฤ","ศ","ส"};
+    public static final String[] DAYNAMESFULLTH = {"อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"};
     public static final String[] MONTHNAMETH = {"มกราคม","กุมพาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"};
 
     public static int getCurrentDay() {

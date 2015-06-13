@@ -2,11 +2,12 @@
 <resources>
     <integer name="COLOR_BLACK">0xff000000</integer>
     <integer name="COLOR_GREEN">0xff00ff00</integer>
-    <integer name="BACKGROUND_CALENDAR">0x60000000</integer>
-    <integer name="DAY_HEADER_NAME">0xffffffff</integer>
-    <integer name="DAY_IN_MONTH">0xffffffff</integer>
-    <integer name="DAY_IN_HOLIDAY">0xffff0000</integer>
-    <integer name="DAY_OTHER_MONTH">0x806d6d6d</integer>
-    <integer name="TODAY">0xff0000ff</integer>
-    <integer name="TODAY_BACKGROUND">0xffffffff</integer>
+    <integer name="COLOR_BACKGROUND_CALENDAR">0x60000000</integer>
+    <integer name="COLOR_DAY_HEADER_NAME">0xffffffff</integer>
+    <integer name="COLOR_DAY_IN_MONTH">0xffffffff</integer>
+    <integer name="COLOR_DAY_IN_HOLIDAY">0xffff0000</integer>
+    <integer name="COLOR_TXT_IN_HOLIDAY">0xffa10000</integer>
+    <integer name="COLOR_DAY_OTHER_MONTH">0x806d6d6d</integer>
+    <integer name="COLOR_TO_DAY">0xff0404B4</integer>
+    <integer name="COLOR_TO_DAY_BACKGROUND">0xff2ECCFA</integer>
 </resources>

@@ -33,7 +33,7 @@
             android:layout_width="56sp"
             android:layout_height="match_parent"
             android:contentDescription="@string/previous_month"
-            android:src="@drawable/ic_previous_month" />
+            android:src="@mipmap/ic_previous_month" />
 
         <Button
             android:id="@+id/month_label"
@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="sans-serif-condensed"
+            android:fontFamily="sans-serif-thin"
             android:gravity="center"
             android:textColor="@color/foreground_full"
             android:textStyle="bold"
@@ -53,7 +53,7 @@
             android:layout_width="56sp"
             android:layout_height="match_parent"
             android:contentDescription="@string/next_month"
-            android:src="@drawable/ic_next_month" />
+            android:src="@mipmap/ic_next_month" />
     </LinearLayout>
 
     <LinearLayout

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
@@ -30,23 +31,25 @@ import java.util.Calendar;
  */
 public class MonthView {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static RemoteViews drawWeeks(Context context, int appWidgetId, RemoteViews rv, SharedPreferences sharedPrefs){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-
+    public static RemoteViews drawWeeks(Context context, RemoteViews rv, SharedPreferences sharedPrefs){
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DATE, sp.getInt(CalendarThaiAction.PREF_DATE, cal.get(Calendar.DATE)));
-        cal.set(Calendar.MONTH, sp.getInt(CalendarThaiAction.PREF_MONTH, cal.get(Calendar.MONTH)));
-        cal.set(Calendar.YEAR, sp.getInt(CalendarThaiAction.PREF_YEAR, cal.get(Calendar.YEAR)));
+        cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.PREF_DATE, cal.get(Calendar.DATE)));
+        cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.PREF_MONTH, cal.get(Calendar.MONTH)));
+        cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.PREF_YEAR, cal.get(Calendar.YEAR)));
 
         CalendarOfMonthDao mCalendarOfMonthDao = new CalendarOfMonthDao(context);
         CalendarOfMonthDto mCalendarOfMonthDto = mCalendarOfMonthDao.getCalendar(cal);
-        rv.setViewVisibility(R.id.calendar,View.VISIBLE);
-        rv.setInt(R.id.container, "setBackgroundColor", sp.getInt(CalendarThaiAction.BACKGROUND_COLOR, R.integer.BACKGROUND_CALENDAR));
+        rv.setViewVisibility(R.id.calendar, View.VISIBLE);
+        rv.setInt(R.id.container, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.BACKGROUND_COLOR, R.integer.COLOR_BACKGROUND_CALENDAR));
 
         //Set title Month Year
         rv.setTextViewText(R.id.month_label, mCalendarOfMonthDto.getMonthTitle() + " "
                 + mCalendarOfMonthDto.getYearTitle());
-        rv.setTextViewTextSize(R.id.month_label, TypedValue.COMPLEX_UNIT_SP, 22);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            rv.setTextViewTextSize(R.id.month_label, TypedValue.COMPLEX_UNIT_SP, 22);
+        } else {
+            rv.setFloat(R.id.month_label, "setTextSize", 22);
+        }
         //Clear content All R.id.calendar
         rv.removeAllViews(R.id.calendar);
 
@@ -57,7 +60,7 @@ public class MonthView {
         WeeksOfMonthDto weeksOfMonthDto = mCalendarOfMonthDto.getWeeksOfMonthDto();
         for (int week = 0; week < weeksOfMonthDto.getMaximumWeeksOfMonth(); week++) {
             rv.addView(R.id.calendar,
-                    WeekView.drawDays(context, appWidgetId, weeksOfMonthDto.weeksOfMonth.get(week),
+                    WeekView.drawDays(context, weeksOfMonthDto.weeksOfMonth.get(week),
                             week, sharedPrefs));
         }
         //End set day

@@ -20,31 +20,24 @@
     android:layout_height="match_parent"
     android:layout_weight="1">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvDay"
+        android:fontFamily="sans-serif-thin"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="18sp"/>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/iv_wanpra"
         android:layout_above="@+id/tvDay"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="-5sp"
+        android:layout_marginBottom="-5dp"
         android:visibility="gone"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvDay"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="18sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvWax"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/tvDay"
-        android:layout_marginTop="-2sp"
-        android:textSize="5sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,6 +45,18 @@
         android:id="@+id/tvHoliday"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-thin"
         android:textSize="6sp"
         android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWax"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tvDay"
+        android:fontFamily="sans-serif-thin"
+        android:layout_marginTop="-2dp"
+        android:textSize="5sp" />
+
 </RelativeLayout>

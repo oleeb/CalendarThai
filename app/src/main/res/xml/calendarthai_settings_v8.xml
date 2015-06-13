@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/settings">
-        <SwitchPreference
+        <CheckBoxPreference
             android:key="show_wanpra"
             android:title="@string/title_show_wanpra"
             android:defaultValue="true"/>
-        <SwitchPreference
+        <CheckBoxPreference
             android:key="show_txt_wax"
             android:title="@string/title_show_txt_wax"
             android:defaultValue="true"/>
@@ -34,7 +34,7 @@
             android:title="@string/title_color_holiday"
             android:defaultValue="@integer/COLOR_DAY_IN_HOLIDAY"
             alphaSlider="true" />
-        <SwitchPreference
+        <CheckBoxPreference
             android:key="show_txt_holiday"
             android:title="@string/title_show_txt_holiday"
             android:defaultValue="true"/>
