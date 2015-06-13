@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.oleeb.calendarthai"
-    android:versionCode="@string/code_version"
+    android:versionCode="@integer/code_version"
     android:versionName="@string/app_version" >
 
     <application

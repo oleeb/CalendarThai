@@ -46,7 +46,7 @@ public class HolidayDatabase {
 
     public static class HolidayHelper extends SQLiteOpenHelper {
         public static final String DB_NAME = "data_holiday";
-        public static final int DB_VERSION = Integer.parseInt(String.valueOf(R.string.database_version));
+        public static final int DB_VERSION = Integer.parseInt(String.valueOf(R.integer.database_version));
 
         private Context mContext;
 

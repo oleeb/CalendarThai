@@ -46,7 +46,7 @@ public class BuddhaMoonPhaseDatabase {
 
     public static class BuddhaMoonPhaseHelper extends SQLiteOpenHelper {
         public static final String DB_NAME = "DB_Buddhamoonphase";
-        public static final int DB_VERSION = Integer.parseInt(String.valueOf(R.string.database_version));
+        public static final int DB_VERSION = Integer.parseInt(String.valueOf(R.integer.database_version));
 
         private Context mContext;
 
