@@ -65,10 +65,13 @@ public class WeekView {
                 } else {
                     rowDayRv.setFloat(R.id.tvDay, "setTextSize", 100);
                 }
+            }else{
+                if (data.getBoolean(CalendarThaiAction.TO_DAY)) {
+                    rowDayRv.setInt(R.id.layRowDayContainer, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
+                }
             }
 
             if (data.getBoolean(CalendarThaiAction.TO_DAY)) {
-                rowDayRv.setInt(R.id.layRowDayContainer,"setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
                 rowDayRv.setTextColor(R.id.tvDay, sharedPrefs.getInt(CalendarThaiAction.TO_DAY_COLOR, R.integer.COLOR_TO_DAY));
             }else if (data.getInt(CalendarThaiAction.DAY_IN_WEEK) == 0
                         || data.get(CalendarThaiAction.HOLIDAY) != null) {
