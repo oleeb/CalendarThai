@@ -31,7 +31,7 @@ import java.util.Calendar;
  */
 public class MonthView {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static RemoteViews drawWeeks(Context context, RemoteViews rv, SharedPreferences sharedPrefs){
+    private static RemoteViews drawWeeks(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Class<?> cls){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.PREF_DATE, cal.get(Calendar.DATE)));
         cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.PREF_MONTH, cal.get(Calendar.MONTH)));
@@ -61,10 +61,37 @@ public class MonthView {
         for (int week = 0; week < weeksOfMonthDto.getMaximumWeeksOfMonth(); week++) {
             rv.addView(R.id.calendar,
                     WeekView.drawDays(context, weeksOfMonthDto.weeksOfMonth.get(week),
-                            week, sharedPrefs));
+                            week, sharedPrefs, cls));
         }
         //End set day
 
+        return rv;
+    }
+
+    public static RemoteViews drawWidgetMonth(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Class<?> cls) {
+        //rv.setInt(R.id.container, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.BACKGROUND_COLOR, R.integer.COLOR_BACKGROUND_CALENDAR));
+        rv = drawWeeks(context, rv, sharedPrefs, cls);
+
+        rv.setViewVisibility(R.id.month_bar, View.VISIBLE);
+        rv.setViewVisibility(R.id.prev_month_button, View.VISIBLE);
+        rv.setOnClickPendingIntent(R.id.prev_month_button,
+                PendingIntent.getBroadcast(context, 0,
+                        new Intent(context, cls)
+                                .setAction(CalendarThaiAction.ACTION_PREVIOUS_MONTH),
+                        PendingIntent.FLAG_UPDATE_CURRENT));
+
+        rv.setViewVisibility(R.id.next_month_button, View.VISIBLE);
+        rv.setOnClickPendingIntent(R.id.next_month_button,
+                PendingIntent.getBroadcast(context, 0,
+                        new Intent(context, cls)
+                                .setAction(CalendarThaiAction.ACTION_NEXT_MONTH),
+                        PendingIntent.FLAG_UPDATE_CURRENT));
+
+        rv.setOnClickPendingIntent(R.id.month_label,
+                PendingIntent.getBroadcast(context, 0,
+                        new Intent(context, cls)
+                                .setAction(CalendarThaiAction.ACTION_RESET_MONTH),
+                        PendingIntent.FLAG_UPDATE_CURRENT));
         return rv;
     }
 }

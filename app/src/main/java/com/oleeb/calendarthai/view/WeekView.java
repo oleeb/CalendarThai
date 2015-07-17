@@ -19,12 +19,14 @@ import com.oleeb.calendarthai.dto.CalendarCurrent;
 import com.oleeb.calendarthai.dto.Days;
 import com.oleeb.calendarthai.dto.DaysOfWeekDto;
 
+import java.util.Objects;
+
 /**
  * Created by j1tth4 on 6/29/14.
  */
 public class WeekView {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static RemoteViews drawDays(Context context, DaysOfWeekDto daysOfWeekDto, int week, SharedPreferences sharedPrefs){
+    public static RemoteViews drawDays(Context context, DaysOfWeekDto daysOfWeekDto, int week, SharedPreferences sharedPrefs, Class<?> cls){
         RemoteViews rowWeekRv = new RemoteViews(context.getPackageName(), R.layout.row_week);
         for(int i = 0; i < daysOfWeekDto.getMaximumDaysOfWeek(); i++){
             final Days days = daysOfWeekDto.daysOfWeek.get(i);
@@ -34,7 +36,7 @@ public class WeekView {
             if (days.data.getBoolean(CalendarThaiAction.TO_MONTH)) { // in Month
                 rowDayRv.setOnClickPendingIntent(R.id.layRowDayContainer,
                         PendingIntent.getBroadcast(context, Integer.parseInt(week + "" + i),
-                                new Intent(context, CalendarThaiWidget.class)
+                                new Intent(context, cls)
                                         .setAction(CalendarThaiAction.ACTION_DAY_DETAIL)
                                         .putExtras(days.data),
                                 PendingIntent.FLAG_UPDATE_CURRENT));
@@ -163,7 +165,7 @@ public class WeekView {
         return rowDayRv;
     }
 
-    public static RemoteViews drawWidgetDayDetail(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Bundle data) {
+    public static RemoteViews drawWidgetDayDetail(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Bundle data, Class<?> cls) {
         //data.get(CalendarThaiAction.TO_MONTH)
         rv.setViewVisibility(R.id.next_month_button, View.GONE);
         rv.setViewVisibility(R.id.prev_month_button, View.GONE);
@@ -202,7 +204,7 @@ public class WeekView {
 
         rv.setOnClickPendingIntent(R.id.calendar,
                 PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, CalendarThaiWidget.class)
+                        new Intent(context, cls)
                                 .setAction(CalendarThaiAction.ACTION_LIST_DAY),
                         PendingIntent.FLAG_UPDATE_CURRENT));
         return rv;

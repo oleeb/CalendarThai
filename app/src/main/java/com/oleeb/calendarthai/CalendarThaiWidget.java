@@ -159,7 +159,7 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, true)
                         .commit();
             }
-            rv = WeekView.drawWidgetDayDetail(context, rv, sharedPrefs, data);
+            rv = WeekView.drawWidgetDayDetail(context, rv, sharedPrefs, data, getClass());
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs.edit()
@@ -170,35 +170,8 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
                         .commit();
             }
-            rv = drawWidgetMonth(context, rv, sharedPrefs);
+            rv = MonthView.drawWidgetMonth(context, rv, sharedPrefs, getClass());
         }
         appWidgetManager.updateAppWidget(appWidgetId, rv);
-    }
-
-    private RemoteViews drawWidgetMonth(Context context, RemoteViews rv, SharedPreferences sharedPrefs) {
-        //rv.setInt(R.id.container, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.BACKGROUND_COLOR, R.integer.COLOR_BACKGROUND_CALENDAR));
-        rv = MonthView.drawWeeks(context, rv, sharedPrefs);
-
-        rv.setViewVisibility(R.id.month_bar, View.VISIBLE);
-        rv.setViewVisibility(R.id.prev_month_button, View.VISIBLE);
-        rv.setOnClickPendingIntent(R.id.prev_month_button,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, CalendarThaiWidget.class)
-                                .setAction(CalendarThaiAction.ACTION_PREVIOUS_MONTH),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-
-        rv.setViewVisibility(R.id.next_month_button, View.VISIBLE);
-        rv.setOnClickPendingIntent(R.id.next_month_button,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, CalendarThaiWidget.class)
-                                .setAction(CalendarThaiAction.ACTION_NEXT_MONTH),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-
-        rv.setOnClickPendingIntent(R.id.month_label,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, CalendarThaiWidget.class)
-                                .setAction(CalendarThaiAction.ACTION_RESET_MONTH),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-        return rv;
     }
 }
