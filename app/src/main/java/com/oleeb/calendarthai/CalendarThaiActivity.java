@@ -1,21 +1,19 @@
 package com.oleeb.calendarthai;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
@@ -23,22 +21,20 @@ import com.oleeb.calendarthai.action.CalendarThaiAction;
 import com.oleeb.calendarthai.view.MonthView;
 import com.oleeb.calendarthai.view.WeekView;
 
-import java.util.Calendar;
-
 /**
  * Created by HackerOne on 5/17/2015.
  */
 @SuppressLint("LongLogTag")
-public class CalendarThaiActivity extends Activity {
+public class CalendarThaiActivity extends FragmentActivity {
     Context context;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle data) {
+        super.onCreate(data);
+        Log.d("CalendarThaiActivity onCreate data", "" + data);
         context = getApplicationContext();
         setTitle(R.string.app_name);
+        setContentView(R.layout.calendarthai_main_activity);
 
-        Log.d("CalendarThaiWidget onCreate savedInstanceState", "" + savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             PreferenceManager.setDefaultValues(context, R.xml.calendarthai_settings, true);
         }else{
@@ -47,7 +43,8 @@ public class CalendarThaiActivity extends Activity {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.calendarthai);
-/*        if(data != null) {
+
+        if(data != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs.edit()
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, true)
@@ -70,14 +67,52 @@ public class CalendarThaiActivity extends Activity {
             }
             rv = MonthView.drawWidgetMonth(context, rv, sharedPrefs, getClass());
         }
-*/
-        rv = MonthView.drawWidgetMonth(context, rv, sharedPrefs, getClass());
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.calendarthai_main_activity, null);
+        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.container);
+
+        LinearLayout.LayoutParams params;
+
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+        LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+
+        linearLayout.addView(rv.apply(context, null), params);
+
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, 2f);
+
+        RemoteViews rv1 = new RemoteViews(context.getPackageName(), R.layout.row_event);
+
+        linearLayout.addView(rv1.apply(context, null),params);
+
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT, 1f);
-        setContentView(rv.apply(context, null),params);
 
-        addContentView(rv.apply(context, null),params);
+        addContentView(linearLayout,params);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.calendarthai_setting, menu);
+        return true;
+    }
+
+    @SuppressLint("LongLogTag")
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.menu_setting:
+                Log.d("CalendarThaiActivity onOptionsItemSelected MenuItem", "" + item.getItemId());
+                Intent intent = new Intent(this, CalendarThaiSettingsActivity.class);
+                this.startActivity(intent);
+                //this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

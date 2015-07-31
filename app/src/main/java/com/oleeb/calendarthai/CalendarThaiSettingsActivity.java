@@ -1,16 +1,13 @@
 package com.oleeb.calendarthai;
 
 import android.annotation.SuppressLint;
-import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +30,7 @@ public class CalendarThaiSettingsActivity extends PreferenceActivity  implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.calendarthai_menu, menu);
+        inflater.inflate(R.menu.calendarthai_done, menu);
         return true;
     }
 
