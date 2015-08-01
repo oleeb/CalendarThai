@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
 import com.oleeb.calendarthai.action.CalendarThaiAction;
+import com.oleeb.calendarthai.receiver.CalendarThaiReceiver;
 import com.oleeb.calendarthai.view.MonthView;
 import com.oleeb.calendarthai.view.WeekView;
 
@@ -57,7 +58,7 @@ public class CalendarThaiActivity extends Activity {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, true)
                         .commit();
             }
-            rv = WeekView.drawWidgetDayDetail(context, rv, sharedPrefs, data, getClass());
+            rv = WeekView.drawWidgetDayDetail(context, rv, sharedPrefs, data, CalendarThaiReceiver.class);
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs.edit()
@@ -68,7 +69,7 @@ public class CalendarThaiActivity extends Activity {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
                         .commit();
             }
-            rv = MonthView.drawWidgetMonth(context, rv, sharedPrefs, getClass());
+            rv = MonthView.drawWidgetMonth(context, rv, sharedPrefs, CalendarThaiReceiver.class);
         }
 
         LayoutInflater inflater = getLayoutInflater();
