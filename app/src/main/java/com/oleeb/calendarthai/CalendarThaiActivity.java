@@ -1,6 +1,7 @@
 package com.oleeb.calendarthai;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,11 +22,13 @@ import com.oleeb.calendarthai.action.CalendarThaiAction;
 import com.oleeb.calendarthai.view.MonthView;
 import com.oleeb.calendarthai.view.WeekView;
 
+import java.util.Calendar;
+
 /**
  * Created by HackerOne on 5/17/2015.
  */
 @SuppressLint("LongLogTag")
-public class CalendarThaiActivity extends FragmentActivity {
+public class CalendarThaiActivity extends Activity {
     Context context;
     @Override
     protected void onCreate(Bundle data) {
@@ -33,7 +36,7 @@ public class CalendarThaiActivity extends FragmentActivity {
         Log.d("CalendarThaiActivity onCreate data", "" + data);
         context = getApplicationContext();
         setTitle(R.string.app_name);
-        setContentView(R.layout.calendarthai_main_activity);
+        //setContentView(R.layout.calendarthai_main_activity);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             PreferenceManager.setDefaultValues(context, R.xml.calendarthai_settings, true);
@@ -89,7 +92,7 @@ public class CalendarThaiActivity extends FragmentActivity {
         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT, 1f);
 
-        addContentView(linearLayout,params);
+        setContentView(linearLayout,params);
     }
 
     @Override
@@ -116,17 +119,7 @@ public class CalendarThaiActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    protected void onResume() {
+        super.onResume();
     }
 }

@@ -27,7 +27,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/calendarthai_widget_info" />
         </receiver>
-
+        <receiver android:name=".receiver.CalendarThaiReceiver" >
+            <intent-filter>
+                <action android:name="com.oleeb.calendarthai.action.ACTION_SETTING" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".CalendarThaiSettingsActivity"
             android:theme="@style/CalendarThaiTheme"
