@@ -1,19 +1,14 @@
 package com.oleeb.calendarthai.view;
 
 import android.annotation.TargetApi;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.oleeb.calendarthai.CalendarThaiActivity;
@@ -29,8 +24,45 @@ import java.util.Calendar;
  * Created by j1tth4 on 6/29/14.
  */
 public class MonthView {
+    public static void drawWidgetMonth(Context context, LinearLayout linearLayout_container, SharedPreferences sharedPrefs) {
+        drawWeeks(context, linearLayout_container, sharedPrefs);
+        Button bt_month_label = (Button)linearLayout_container.findViewById(R.id.month_label);
+        ImageButton ibt_prev_month_button = (ImageButton)linearLayout_container.findViewById(R.id.prev_month_button);
+        ImageButton ibt_next_month_button = (ImageButton)linearLayout_container.findViewById(R.id.next_month_button);
+        bt_month_label.setVisibility(View.VISIBLE);
+        ibt_prev_month_button.setVisibility(View.VISIBLE);
+        ibt_next_month_button.setVisibility(View.VISIBLE);
+        bt_month_label.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CalendarThaiActivity calendarThaiActivity = new CalendarThaiActivity();
+                        calendarThaiActivity.drawCalendar(CalendarThaiAction.ACTION_RESET_MONTH, null);
+                    }
+                }
+        );
+        ibt_prev_month_button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CalendarThaiActivity calendarThaiActivity = new CalendarThaiActivity();
+                        calendarThaiActivity.drawCalendar(CalendarThaiAction.ACTION_PREVIOUS_MONTH, null);
+                    }
+                }
+        );
+        ibt_next_month_button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CalendarThaiActivity calendarThaiActivity = new CalendarThaiActivity();
+                        calendarThaiActivity.drawCalendar(CalendarThaiAction.ACTION_NEXT_MONTH, null);
+                    }
+                }
+        );
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static LinearLayout drawWeeks(Context context, LinearLayout linearLayout_container, SharedPreferences sharedPrefs){
+    private static void drawWeeks(Context context, LinearLayout linearLayout_container, SharedPreferences sharedPrefs){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.PREF_DATE, cal.get(Calendar.DATE)));
         cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.PREF_MONTH, cal.get(Calendar.MONTH)));
@@ -63,48 +95,8 @@ public class MonthView {
         WeeksOfMonthDto weeksOfMonthDto = mCalendarOfMonthDto.getWeeksOfMonthDto();
         for (int week = 0; week < weeksOfMonthDto.getMaximumWeeksOfMonth(); week++) {
             linearLayout_calendar.addView(WeekView.drawDays(context, weeksOfMonthDto.weeksOfMonth.get(week),
-                            week, sharedPrefs), params);
+                    week, sharedPrefs), params);
         }
         //End set day
-
-        return linearLayout_container;
-    }
-
-    public static LinearLayout drawWidgetMonth(final Context context, LinearLayout linearLayout_container, SharedPreferences sharedPrefs) {
-        linearLayout_container = drawWeeks(context, linearLayout_container, sharedPrefs);
-        Button bt_month_label = (Button)linearLayout_container.findViewById(R.id.month_label);
-        ImageButton ibt_prev_month_button = (ImageButton)linearLayout_container.findViewById(R.id.prev_month_button);
-        ImageButton ibt_next_month_button = (ImageButton)linearLayout_container.findViewById(R.id.next_month_button);
-        bt_month_label.setVisibility(View.VISIBLE);
-        ibt_prev_month_button.setVisibility(View.VISIBLE);
-        ibt_next_month_button.setVisibility(View.VISIBLE);
-        bt_month_label.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CalendarThaiActivity calendarThaiActivity = new CalendarThaiActivity();
-                        calendarThaiActivity.drawCalendar(context, CalendarThaiAction.ACTION_RESET_MONTH, null);
-                    }
-                }
-        );
-        ibt_prev_month_button.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CalendarThaiActivity calendarThaiActivity = new CalendarThaiActivity();
-                        calendarThaiActivity.drawCalendar(context, CalendarThaiAction.ACTION_PREVIOUS_MONTH, null);
-                    }
-                }
-        );
-        ibt_next_month_button.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CalendarThaiActivity calendarThaiActivity = new CalendarThaiActivity();
-                        calendarThaiActivity.drawCalendar(context, CalendarThaiAction.ACTION_NEXT_MONTH, null);
-                    }
-                }
-        );
-        return linearLayout_container;
     }
 }

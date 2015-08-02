@@ -13,15 +13,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RemoteViews;
 
 import com.oleeb.calendarthai.action.CalendarThaiAction;
-import com.oleeb.calendarthai.receiver.CalendarThaiReceiver;
 import com.oleeb.calendarthai.view.MonthView;
-import com.oleeb.calendarthai.view.MonthViewWidget;
-import com.oleeb.calendarthai.view.WeekViewWidget;
 
 import java.util.Calendar;
 
@@ -30,8 +25,8 @@ import java.util.Calendar;
  */
 @SuppressLint("LongLogTag")
 public class CalendarThaiActivity extends Activity {
-    Context context;
-    Bundle extras;
+    protected Context context;
+    private Bundle extras;
     @Override
     protected void onCreate(Bundle data) {
         super.onCreate(data);
@@ -45,7 +40,6 @@ public class CalendarThaiActivity extends Activity {
         }else{
             PreferenceManager.setDefaultValues(context, R.xml.calendarthai_settings_v8, true);
         }
-
         drawCalendar();
     }
 
@@ -79,15 +73,19 @@ public class CalendarThaiActivity extends Activity {
     }
 
     private void drawCalendar() {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        LinearLayout linearLayout_container = (LinearLayout) findViewById(R.id.container);
+//        LayoutInflater inflater = (LayoutInflater)context.getSystemService(
+//                Context.LAYOUT_INFLATER_SERVICE);;
+//        LinearLayout linearLayout_container = (LinearLayout)
+//                inflater.inflate(R.layout.calendarthai_main_activity, null);
 
+        LinearLayout linearLayout_container = (LinearLayout) findViewById(R.id.container);
         linearLayout_container.removeAllViews();
 
-        LayoutInflater layoutInflater = getLayoutInflater();
-        LinearLayout linearLayout_calendarthai = (LinearLayout)layoutInflater.inflate(
+        LayoutInflater inflater = getLayoutInflater();
+        LinearLayout linearLayout_calendarthai = (LinearLayout)inflater.inflate(
                 R.layout.calendarthai, null);
 
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         if(extras != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs.edit()
@@ -98,8 +96,6 @@ public class CalendarThaiActivity extends Activity {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, true)
                         .commit();
             }
-            linearLayout_calendarthai = MonthView.drawWidgetMonth(
-                    context, linearLayout_calendarthai, sharedPrefs);
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs.edit()
@@ -110,8 +106,7 @@ public class CalendarThaiActivity extends Activity {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
                         .commit();
             }
-            linearLayout_calendarthai = MonthView.drawWidgetMonth(
-                    context, linearLayout_calendarthai, sharedPrefs);
+            MonthView.drawWidgetMonth(context, linearLayout_calendarthai, sharedPrefs);
         }
 
         LinearLayout.LayoutParams params;
@@ -123,18 +118,17 @@ public class CalendarThaiActivity extends Activity {
 
         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT, 2f);
-        LinearLayout linearLayout_row_event = (LinearLayout)layoutInflater.inflate(
+        LinearLayout linearLayout_row_event = (LinearLayout)inflater.inflate(
                 R.layout.row_event, null);
         linearLayout_container.addView(linearLayout_row_event, params);
     }
 
-    public void drawCalendar(Context context,String action, Bundle extras) {
+    public void drawCalendar(String action, Bundle extras) {
         this.context = context;
-        SharedPreferences sharedPrefs = null;
         this.extras = extras;
         Log.d("CalendarThaiWidget onReceive action", "" + action);
         Log.d("CalendarThaiWidget onReceive extras", "" + extras);
-
+        SharedPreferences sharedPrefs = null;
         if (CalendarThaiAction.ACTION_SETTING.equals(action)){
 
         } else if (CalendarThaiAction.ACTION_PREVIOUS_MONTH.equals(action)) {
@@ -201,6 +195,6 @@ public class CalendarThaiActivity extends Activity {
         } else if (CalendarThaiAction.ACTION_DAY_DETAIL.equals(action)) {
 
         }
-        onResume();
+        drawCalendar();
     }
 }

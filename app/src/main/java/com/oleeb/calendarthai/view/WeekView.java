@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+import com.oleeb.calendarthai.CalendarThaiActivity;
 import com.oleeb.calendarthai.R;
 import com.oleeb.calendarthai.action.CalendarThaiAction;
 import com.oleeb.calendarthai.dto.CalendarCurrent;
@@ -29,8 +30,7 @@ import com.oleeb.calendarthai.dto.DaysOfWeekDto;
 public class WeekView {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static LinearLayout drawDays(Context context, DaysOfWeekDto daysOfWeekDto, int week, SharedPreferences sharedPrefs){
-        LayoutInflater inflater = (LayoutInflater)
-                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);;
         LinearLayout linearLayout_row_week = (LinearLayout)
                 inflater.inflate(R.layout.row_week, null);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -58,23 +58,22 @@ public class WeekView {
 //                                        .putExtras(days.data),
 //                                PendingIntent.FLAG_UPDATE_CURRENT));
             }
-
-            linearLayout_row_week.addView(WeekView.drawDayDetail(context, relativeLayout_cell_day, sharedPrefs, days.data), params);
+            setDayDetail(context, relativeLayout_cell_day, days.data, sharedPrefs);
+            linearLayout_row_week.addView(relativeLayout_cell_day, params);
         }
         return linearLayout_row_week;
     }
 
     @SuppressLint("NewApi")
-    public static RelativeLayout drawDayDetail(Context context, RelativeLayout relativeLayout_cell_day, SharedPreferences sharedPrefs, Bundle data) {
-        relativeLayout_cell_day = showDays(context, relativeLayout_cell_day, sharedPrefs, data);
-        relativeLayout_cell_day = showTxtHolidays(context, relativeLayout_cell_day, sharedPrefs, data);
-        relativeLayout_cell_day = showWaxDays(context, relativeLayout_cell_day, sharedPrefs, data);
-        relativeLayout_cell_day = showImgWanpra(context, relativeLayout_cell_day, sharedPrefs, data);
-        return relativeLayout_cell_day;
+    public static void setDayDetail(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
+        showDays(context, relativeLayout_cell_day, data, sharedPrefs);
+        showTxtHolidays(context, relativeLayout_cell_day, data, sharedPrefs);
+        showWaxDays(context, relativeLayout_cell_day, data, sharedPrefs);
+        showImgWanpra(context, relativeLayout_cell_day, data, sharedPrefs);
     }
 
     @SuppressLint("NewApi")
-    public static RelativeLayout showDays(Context context, RelativeLayout relativeLayout_cell_day, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showDays(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
         TextView tvDay = (TextView)relativeLayout_cell_day.findViewById(R.id.tvDay);
         tvDay.setText(data.get(CalendarThaiAction.DAY).toString());
         if (data.getBoolean(CalendarThaiAction.TO_MONTH)) {
@@ -97,11 +96,10 @@ public class WeekView {
             tvDay.setTextColor(sharedPrefs.getInt(CalendarThaiAction.OTHER_MONTH_COLOR, R.integer.COLOR_DAY_OTHER_MONTH));
         }
         tvDay.setVisibility(View.VISIBLE);
-        return relativeLayout_cell_day;
     }
 
     @SuppressLint("NewApi")
-    public static RelativeLayout showTxtHolidays(Context context, RelativeLayout relativeLayout_cell_day, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showTxtHolidays(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
         TextView tvHoliday = (TextView) relativeLayout_cell_day.findViewById(R.id.tvHoliday);
         if (data.getBoolean(CalendarThaiAction.TO_MONTH) && data.get(CalendarThaiAction.HOLIDAY) != null) {
             tvHoliday.setText(data.get(CalendarThaiAction.HOLIDAY).toString());
@@ -116,11 +114,10 @@ public class WeekView {
                 tvHoliday.setVisibility(View.GONE);
             }
         }
-        return relativeLayout_cell_day;
     }
 
     @SuppressLint("NewApi")
-    public static RelativeLayout showWaxDays(Context context, RelativeLayout relativeLayout_cell_day, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showWaxDays(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
         TextView tvWax = (TextView) relativeLayout_cell_day.findViewById(R.id.tvWax);
         String str_wax = (data.get(CalendarThaiAction.WAXING).equals("WX") ? "ขึ้น " : "แรม ")
                 + data.get(CalendarThaiAction.WAXING_DAY) + " ค่ำ "
@@ -150,11 +147,10 @@ public class WeekView {
         } else {
             tvWax.setVisibility(View.GONE);
         }
-        return relativeLayout_cell_day;
     }
 
     @SuppressLint("NewApi")
-    public static RelativeLayout showImgWanpra(Context context, RelativeLayout relativeLayout_cell_day, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showImgWanpra(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
         ImageView iv_wanpra = (ImageView) relativeLayout_cell_day.findViewById(R.id.iv_wanpra);
         if (data.getBoolean(CalendarThaiAction.TO_MONTH)) {
             if (sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
@@ -170,10 +166,9 @@ public class WeekView {
                 iv_wanpra.setVisibility(View.GONE);
             }
         }
-        return relativeLayout_cell_day;
     }
 
-    public static RemoteViews drawWidgetDayDetail(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Bundle data, Class<?> cls) {
+    public static RemoteViews drawWidgetDayDetail(Context context, RemoteViews rv, Bundle data, Class<?> cls, SharedPreferences sharedPrefs) {
         //data.get(CalendarThaiAction.TO_MONTH)
         rv.setViewVisibility(R.id.next_month_button, View.GONE);
         rv.setViewVisibility(R.id.prev_month_button, View.GONE);

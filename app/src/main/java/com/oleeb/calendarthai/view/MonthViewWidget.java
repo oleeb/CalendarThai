@@ -23,7 +23,7 @@ import java.util.Calendar;
  */
 public class MonthViewWidget {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static RemoteViews drawWeeks(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Class<?> cls){
+    private static void drawWeeks(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Class<?> cls){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.PREF_DATE, cal.get(Calendar.DATE)));
         cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.PREF_MONTH, cal.get(Calendar.MONTH)));
@@ -56,13 +56,11 @@ public class MonthViewWidget {
                             week, sharedPrefs, cls));
         }
         //End set day
-
-        return rv;
     }
 
-    public static RemoteViews drawWidgetMonth(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Class<?> cls) {
+    public static void drawWidgetMonth(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Class<?> cls) {
         //rv.setInt(R.id.container_calendar, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.BACKGROUND_COLOR, R.integer.COLOR_BACKGROUND_CALENDAR));
-        rv = drawWeeks(context, rv, sharedPrefs, cls);
+        drawWeeks(context, rv, sharedPrefs, cls);
 
         rv.setViewVisibility(R.id.month_bar, View.VISIBLE);
         rv.setViewVisibility(R.id.prev_month_button, View.VISIBLE);
@@ -84,6 +82,5 @@ public class MonthViewWidget {
                         new Intent(context, cls)
                                 .setAction(CalendarThaiAction.ACTION_RESET_MONTH),
                         PendingIntent.FLAG_UPDATE_CURRENT));
-        return rv;
     }
 }

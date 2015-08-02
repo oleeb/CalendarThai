@@ -152,7 +152,7 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, true)
                         .commit();
             }
-            rv = WeekViewWidget.drawWidgetDayDetail(context, rv, sharedPrefs, data, getClass());
+            WeekViewWidget.drawWidgetDayDetail(context, rv, sharedPrefs, data, getClass());
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs.edit()
@@ -163,7 +163,7 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
                         .commit();
             }
-            rv = MonthViewWidget.drawWidgetMonth(context, rv, sharedPrefs, getClass());
+            MonthViewWidget.drawWidgetMonth(context, rv, sharedPrefs, getClass());
         }
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }

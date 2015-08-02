@@ -38,23 +38,22 @@ public class WeekViewWidget {
                                         .putExtras(days.data),
                                 PendingIntent.FLAG_UPDATE_CURRENT));
             }
-
-            rowWeekRv.addView(R.id.row_week_container, WeekViewWidget.drawDayDetail(context, rowDayRv, sharedPrefs, days.data));
+            setDayDetail(context, rowDayRv, sharedPrefs, days.data);
+            rowWeekRv.addView(R.id.row_week_container, rowDayRv);
         }
         return rowWeekRv;
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews drawDayDetail(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
-        rowDayRv = showDays(context, rowDayRv, sharedPrefs, data);
-        rowDayRv = showTxtHolidays(context, rowDayRv, sharedPrefs, data);
-        rowDayRv = showWaxDays(context, rowDayRv, sharedPrefs, data);
-        rowDayRv = showImgWanpra(context, rowDayRv, sharedPrefs, data);
-        return rowDayRv;
+    public static void setDayDetail(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
+        showDays(context, rowDayRv, sharedPrefs, data);
+        showTxtHolidays(context, rowDayRv, sharedPrefs, data);
+        showWaxDays(context, rowDayRv, sharedPrefs, data);
+        showImgWanpra(context, rowDayRv, sharedPrefs, data);
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews showDays(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showDays(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
         rowDayRv.setTextViewText(R.id.tvDay, data.get(CalendarThaiAction.DAY).toString());
         if (data.getBoolean(CalendarThaiAction.TO_MONTH)) {
             if(sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)){
@@ -79,11 +78,10 @@ public class WeekViewWidget {
             rowDayRv.setTextColor(R.id.tvDay, sharedPrefs.getInt(CalendarThaiAction.OTHER_MONTH_COLOR, R.integer.COLOR_DAY_OTHER_MONTH));
         }
         rowDayRv.setViewVisibility(R.id.tvDay, View.VISIBLE);
-        return rowDayRv;
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews showTxtHolidays(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showTxtHolidays(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
         if (data.getBoolean(CalendarThaiAction.TO_MONTH) && data.get(CalendarThaiAction.HOLIDAY) != null) {
             rowDayRv.setTextViewText(R.id.tvHoliday, data.get(CalendarThaiAction.HOLIDAY).toString());
             rowDayRv.setTextColor(R.id.tvHoliday, sharedPrefs.getInt(CalendarThaiAction.TXT_HOLIDAY_COLOR, R.integer.COLOR_TXT_IN_HOLIDAY));
@@ -101,11 +99,10 @@ public class WeekViewWidget {
                 rowDayRv.setViewVisibility(R.id.tvHoliday, View.GONE);
             }
         }
-        return rowDayRv;
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews showWaxDays(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showWaxDays(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
         String str_wax = (data.get(CalendarThaiAction.WAXING).equals("WX") ? "ขึ้น " : "แรม ")
                 + data.get(CalendarThaiAction.WAXING_DAY) + " ค่ำ "
                 + "เดือน " + data.get(CalendarThaiAction.WAXING_MONTH_2);
@@ -138,11 +135,10 @@ public class WeekViewWidget {
         } else {
             rowDayRv.setViewVisibility(R.id.tvWax, View.GONE);
         }
-        return rowDayRv;
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews showImgWanpra(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showImgWanpra(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
         if (data.getBoolean(CalendarThaiAction.TO_MONTH)) {
             if (sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
                     && data.getBoolean(CalendarThaiAction.WAXING_WANPRA)) {
@@ -159,10 +155,9 @@ public class WeekViewWidget {
                 rowDayRv.setViewVisibility(R.id.iv_wanpra, View.GONE);
             }
         }
-        return rowDayRv;
     }
 
-    public static RemoteViews drawWidgetDayDetail(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Bundle data, Class<?> cls) {
+    public static void drawWidgetDayDetail(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Bundle data, Class<?> cls) {
         //data.get(CalendarThaiAction.TO_MONTH)
         rv.setViewVisibility(R.id.next_month_button, View.GONE);
         rv.setViewVisibility(R.id.prev_month_button, View.GONE);
@@ -195,7 +190,9 @@ public class WeekViewWidget {
 
         RemoteViews rowWeekRv = new RemoteViews(context.getPackageName(), R.layout.row_week);
         RemoteViews rowDayRv = new RemoteViews(context.getPackageName(), R.layout.cell_day);
-        rowWeekRv.addView(R.id.row_week_container, WeekViewWidget.drawDayDetail(context, rowDayRv, sharedPrefs, data));
+
+        setDayDetail(context, rowDayRv, sharedPrefs, data);
+        rowWeekRv.addView(R.id.row_week_container, rowDayRv);
 
         rv.addView(R.id.calendar, rowWeekRv);
 
@@ -204,6 +201,5 @@ public class WeekViewWidget {
                         new Intent(context, cls)
                                 .setAction(CalendarThaiAction.ACTION_LIST_DAY),
                         PendingIntent.FLAG_UPDATE_CURRENT));
-        return rv;
     }
 }
