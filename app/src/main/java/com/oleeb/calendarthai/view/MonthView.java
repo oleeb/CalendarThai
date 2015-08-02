@@ -5,23 +5,22 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
+import com.oleeb.calendarthai.CalendarThaiActivity;
 import com.oleeb.calendarthai.R;
 import com.oleeb.calendarthai.action.CalendarThaiAction;
 import com.oleeb.calendarthai.dao.CalendarOfMonthDao;
 import com.oleeb.calendarthai.dto.CalendarOfMonthDto;
-import com.oleeb.calendarthai.dto.Days;
-import com.oleeb.calendarthai.dto.DaysOfWeekDto;
 import com.oleeb.calendarthai.dto.WeeksOfMonthDto;
 
 import java.util.Calendar;
@@ -31,7 +30,7 @@ import java.util.Calendar;
  */
 public class MonthView {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static RemoteViews drawWeeks(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Class<?> cls){
+    private static LinearLayout drawWeeks(Context context, LinearLayout linearLayout_container, SharedPreferences sharedPrefs){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.PREF_DATE, cal.get(Calendar.DATE)));
         cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.PREF_MONTH, cal.get(Calendar.MONTH)));
@@ -39,59 +38,73 @@ public class MonthView {
 
         CalendarOfMonthDao mCalendarOfMonthDao = new CalendarOfMonthDao(context);
         CalendarOfMonthDto mCalendarOfMonthDto = mCalendarOfMonthDao.getCalendar(cal);
-        rv.setViewVisibility(R.id.calendar, View.VISIBLE);
-        rv.setInt(R.id.container, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.BACKGROUND_COLOR, R.integer.COLOR_BACKGROUND_CALENDAR));
 
         //Set title Month Year
-        rv.setTextViewText(R.id.month_label, mCalendarOfMonthDto.getMonthTitle() + " "
+        TextView textView_month_label = (TextView)linearLayout_container.findViewById(R.id.month_label);
+        textView_month_label.setText(mCalendarOfMonthDto.getMonthTitle() + " "
                 + mCalendarOfMonthDto.getYearTitle());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rv.setTextViewTextSize(R.id.month_label, TypedValue.COMPLEX_UNIT_SP, 22);
-        } else {
-            rv.setFloat(R.id.month_label, "setTextSize", 22);
-        }
+        textView_month_label.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+
+        LinearLayout linearLayout_calendar = (LinearLayout)linearLayout_container.findViewById(R.id.calendar);
+        linearLayout_calendar.setVisibility(View.VISIBLE);
+        linearLayout_calendar.setBackgroundColor(sharedPrefs.getInt(CalendarThaiAction.BACKGROUND_COLOR, R.integer.COLOR_BACKGROUND_CALENDAR));
+
         //Clear content All R.id.calendar
-        rv.removeAllViews(R.id.calendar);
+        linearLayout_calendar.removeAllViews();
 
         //Set Days Name Header title
-        rv.addView(R.id.calendar, DaysHeaderNameView
+        linearLayout_calendar.addView(DaysHeaderNameView
                 .drawDaysHeaderName(context, mCalendarOfMonthDto.getDayNames()));
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, 1f);
         //Set Days
         WeeksOfMonthDto weeksOfMonthDto = mCalendarOfMonthDto.getWeeksOfMonthDto();
         for (int week = 0; week < weeksOfMonthDto.getMaximumWeeksOfMonth(); week++) {
-            rv.addView(R.id.calendar,
-                    WeekView.drawDays(context, weeksOfMonthDto.weeksOfMonth.get(week),
-                            week, sharedPrefs, cls));
+            linearLayout_calendar.addView(WeekView.drawDays(context, weeksOfMonthDto.weeksOfMonth.get(week),
+                            week, sharedPrefs), params);
         }
         //End set day
 
-        return rv;
+        return linearLayout_container;
     }
 
-    public static RemoteViews drawWidgetMonth(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Class<?> cls) {
-        //rv.setInt(R.id.container, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.BACKGROUND_COLOR, R.integer.COLOR_BACKGROUND_CALENDAR));
-        rv = drawWeeks(context, rv, sharedPrefs, cls);
-
-        rv.setViewVisibility(R.id.month_bar, View.VISIBLE);
-        rv.setViewVisibility(R.id.prev_month_button, View.VISIBLE);
-        rv.setOnClickPendingIntent(R.id.prev_month_button,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, cls)
-                                .setAction(CalendarThaiAction.ACTION_PREVIOUS_MONTH),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-
-        rv.setViewVisibility(R.id.next_month_button, View.VISIBLE);
-        rv.setOnClickPendingIntent(R.id.next_month_button,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, cls)
-                                .setAction(CalendarThaiAction.ACTION_NEXT_MONTH),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-
-        rv.setOnClickPendingIntent(R.id.month_label,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, cls)
-                                .setAction(CalendarThaiAction.ACTION_RESET_MONTH),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-        return rv;
+    public static LinearLayout drawWidgetMonth(final Context context, LinearLayout linearLayout_container, SharedPreferences sharedPrefs) {
+        linearLayout_container = drawWeeks(context, linearLayout_container, sharedPrefs);
+        Button bt_month_label = (Button)linearLayout_container.findViewById(R.id.month_label);
+        ImageButton ibt_prev_month_button = (ImageButton)linearLayout_container.findViewById(R.id.prev_month_button);
+        ImageButton ibt_next_month_button = (ImageButton)linearLayout_container.findViewById(R.id.next_month_button);
+        bt_month_label.setVisibility(View.VISIBLE);
+        ibt_prev_month_button.setVisibility(View.VISIBLE);
+        ibt_next_month_button.setVisibility(View.VISIBLE);
+        bt_month_label.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CalendarThaiActivity calendarThaiActivity = new CalendarThaiActivity();
+                        calendarThaiActivity.drawCalendar(context, CalendarThaiAction.ACTION_RESET_MONTH, null);
+                    }
+                }
+        );
+        ibt_prev_month_button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CalendarThaiActivity calendarThaiActivity = new CalendarThaiActivity();
+                        calendarThaiActivity.drawCalendar(context, CalendarThaiAction.ACTION_PREVIOUS_MONTH, null);
+                    }
+                }
+        );
+        ibt_next_month_button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CalendarThaiActivity calendarThaiActivity = new CalendarThaiActivity();
+                        calendarThaiActivity.drawCalendar(context, CalendarThaiAction.ACTION_NEXT_MONTH, null);
+                    }
+                }
+        );
+        return linearLayout_container;
     }
 }

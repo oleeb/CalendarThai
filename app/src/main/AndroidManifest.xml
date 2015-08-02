@@ -27,8 +27,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/calendarthai_widget_info" />
         </receiver>
+        <!--
         <receiver android:name=".receiver.CalendarThaiReceiver" >
         </receiver>
+        -->
         <activity
             android:name=".CalendarThaiSettingsActivity"
             android:theme="@style/CalendarThaiTheme"
