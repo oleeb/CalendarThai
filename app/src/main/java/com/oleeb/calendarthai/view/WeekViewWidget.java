@@ -66,7 +66,9 @@ public class WeekViewWidget {
             }
 
             if (data.getBoolean(CalendarThaiAction.TO_DAY)) {
-                rowDayRv.setInt(R.id.layRowDayContainer,"setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
+                if(!sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)){
+                    rowDayRv.setInt(R.id.layRowDayContainer, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
+                }
                 rowDayRv.setTextColor(R.id.tvDay, sharedPrefs.getInt(CalendarThaiAction.TO_DAY_COLOR, R.integer.COLOR_TO_DAY));
             }else if (data.getInt(CalendarThaiAction.DAY_IN_WEEK) == 0
                         || data.get(CalendarThaiAction.HOLIDAY) != null) {
@@ -88,9 +90,9 @@ public class WeekViewWidget {
 
             if (sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    rowDayRv.setTextViewTextSize(R.id.tvHoliday, TypedValue.COMPLEX_UNIT_SP, 22);
+                    rowDayRv.setTextViewTextSize(R.id.tvHoliday, TypedValue.COMPLEX_UNIT_SP, 28);
                 } else {
-                    rowDayRv.setFloat(R.id.tvHoliday, "setTextSize", 22);
+                    rowDayRv.setFloat(R.id.tvHoliday, "setTextSize", 28);
                 }
                 rowDayRv.setViewVisibility(R.id.tvHoliday, View.VISIBLE);
             } else if (sharedPrefs.getBoolean(CalendarThaiAction.SHOW_TXT_HOLIDAY, false)){
@@ -158,6 +160,10 @@ public class WeekViewWidget {
     }
 
     public static void drawWidgetDayDetail(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Bundle data, Class<?> cls) {
+        if(data.getBoolean(CalendarThaiAction.TO_DAY)) {
+            rv.setInt(R.id.container_calendar, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
+        }
+
         //data.get(CalendarThaiAction.TO_MONTH)
         rv.setViewVisibility(R.id.next_month_button, View.GONE);
         rv.setViewVisibility(R.id.prev_month_button, View.GONE);
@@ -172,10 +178,6 @@ public class WeekViewWidget {
         }
 
         rv.removeAllViews(R.id.calendar);
-
-        if(data.getBoolean(CalendarThaiAction.TO_DAY)) {
-            rv.setInt(R.id.container_calendar, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
-        }
 
         RemoteViews rowDayNamesRv = new RemoteViews(context.getPackageName(), R.layout.row_header);
         RemoteViews cellDayNamesRv = new RemoteViews(context.getPackageName(), R.layout.cell_header);

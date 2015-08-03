@@ -32,12 +32,7 @@
         </receiver>
         -->
         <activity
-            android:name=".CalendarThaiSettingsActivity"
-            android:theme="@style/CalendarThaiTheme"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".CalendarThaiActivity">
+            android:name=".CalendarThaiActivity"
             android:theme="@style/CalendarThaiTheme"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -45,7 +40,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".CalendarThaiSettingsActivity"
+            android:theme="@style/CalendarThaiTheme"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

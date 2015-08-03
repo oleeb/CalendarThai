@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.oleeb.calendarthai.action.CalendarThaiAction;
 
@@ -19,7 +20,8 @@ public class CalendarThaiSettingsActivity extends PreferenceActivity  implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("CalendarThai Settings");
+        setTitle(R.string.calendarthai_settings);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             addPreferencesFromResource(R.xml.calendarthai_settings);
         }else{
