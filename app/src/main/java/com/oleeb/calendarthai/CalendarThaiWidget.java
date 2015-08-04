@@ -1,28 +1,21 @@
 package com.oleeb.calendarthai;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import com.oleeb.calendarthai.action.CalendarThaiAction;
-import com.oleeb.calendarthai.dto.CalendarCurrent;
-import com.oleeb.calendarthai.view.MonthView;
-import com.oleeb.calendarthai.view.WeekView;
+import com.oleeb.calendarthai.view.MonthViewWidget;
+import com.oleeb.calendarthai.view.WeekViewWidget;
 
 import java.util.Calendar;
 
@@ -159,7 +152,7 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, true)
                         .commit();
             }
-            rv = WeekView.drawWidgetDayDetail(context, rv, sharedPrefs, data);
+            WeekViewWidget.drawWidgetDayDetail(context, rv, sharedPrefs, data, getClass());
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs.edit()
@@ -170,35 +163,8 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                         .putBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
                         .commit();
             }
-            rv = drawWidgetMonth(context, rv, sharedPrefs);
+            MonthViewWidget.drawWidgetMonth(context, rv, sharedPrefs, getClass());
         }
         appWidgetManager.updateAppWidget(appWidgetId, rv);
-    }
-
-    private RemoteViews drawWidgetMonth(Context context, RemoteViews rv, SharedPreferences sharedPrefs) {
-        //rv.setInt(R.id.container, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.BACKGROUND_COLOR, R.integer.COLOR_BACKGROUND_CALENDAR));
-        rv = MonthView.drawWeeks(context, rv, sharedPrefs);
-
-        rv.setViewVisibility(R.id.month_bar, View.VISIBLE);
-        rv.setViewVisibility(R.id.prev_month_button, View.VISIBLE);
-        rv.setOnClickPendingIntent(R.id.prev_month_button,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, CalendarThaiWidget.class)
-                                .setAction(CalendarThaiAction.ACTION_PREVIOUS_MONTH),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-
-        rv.setViewVisibility(R.id.next_month_button, View.VISIBLE);
-        rv.setOnClickPendingIntent(R.id.next_month_button,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, CalendarThaiWidget.class)
-                                .setAction(CalendarThaiAction.ACTION_NEXT_MONTH),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-
-        rv.setOnClickPendingIntent(R.id.month_label,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, CalendarThaiWidget.class)
-                                .setAction(CalendarThaiAction.ACTION_RESET_MONTH),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-        return rv;
     }
 }

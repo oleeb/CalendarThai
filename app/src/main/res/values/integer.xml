@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <integer name="code_version">1</integer>
+    <integer name="code_version">3</integer>
     <integer name="database_version">1</integer>
 
     <integer name="COLOR_BLACK">0xff000000</integer>

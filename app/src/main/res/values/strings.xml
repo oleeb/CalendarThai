@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">CalendarThai</string>
-    <string name="app_version">1.0</string>
+    <string name="app_version">beta v.2</string>
 
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>
-
+    <string name="calendarthai_settings">CalendarThai Settings</string>
     <string name="done">ตกลง</string>
     <string name="settings">ตั้งค่า</string>
 
