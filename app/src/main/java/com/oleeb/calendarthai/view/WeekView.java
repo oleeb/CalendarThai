@@ -9,10 +9,17 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
-import com.oleeb.calendarthai.CalendarThaiWidget;
+import com.oleeb.calendarthai.CalendarThaiActivity;
 import com.oleeb.calendarthai.R;
 import com.oleeb.calendarthai.action.CalendarThaiAction;
 import com.oleeb.calendarthai.dto.CalendarCurrent;
@@ -24,187 +31,209 @@ import com.oleeb.calendarthai.dto.DaysOfWeekDto;
  */
 public class WeekView {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static RemoteViews drawDays(Context context, DaysOfWeekDto daysOfWeekDto, int week, SharedPreferences sharedPrefs){
-        RemoteViews rowWeekRv = new RemoteViews(context.getPackageName(), R.layout.row_week);
+    public static LinearLayout drawDays(final Context context, final LinearLayout linearLayout_calendarthai, DaysOfWeekDto daysOfWeekDto, int week, SharedPreferences sharedPrefs){
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);;
+        LinearLayout linearLayout_row_week = (LinearLayout)
+                inflater.inflate(R.layout.row_week, null);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, 1f);
         for(int i = 0; i < daysOfWeekDto.getMaximumDaysOfWeek(); i++){
             final Days days = daysOfWeekDto.daysOfWeek.get(i);
 
-            RemoteViews rowDayRv = new RemoteViews(context.getPackageName(), R.layout.cell_day);
+            RelativeLayout relativeLayout_cell_day = (RelativeLayout)
+                    inflater.inflate(R.layout.cell_day, null);
 
             if (days.data.getBoolean(CalendarThaiAction.TO_MONTH)) { // in Month
-                rowDayRv.setOnClickPendingIntent(R.id.layRowDayContainer,
-                        PendingIntent.getBroadcast(context, Integer.parseInt(week + "" + i),
-                                new Intent(context, CalendarThaiWidget.class)
-                                        .setAction(CalendarThaiAction.ACTION_DAY_DETAIL)
-                                        .putExtras(days.data),
-                                PendingIntent.FLAG_UPDATE_CURRENT));
+                relativeLayout_cell_day.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MonthView monthView = new MonthView();
+                            monthView.drawCalendar(context, linearLayout_calendarthai, CalendarThaiAction.ACTION_DAY_DETAIL, days.data);
+                        }
+                    }
+
+                );
             }
 
-            rowWeekRv.addView(R.id.row_week_container, WeekView.drawDayDetail(context, rowDayRv, sharedPrefs, days.data));
+            setDayDetail(context, relativeLayout_cell_day, days.data, sharedPrefs);
+            linearLayout_row_week.addView(relativeLayout_cell_day, params);
         }
-        return rowWeekRv;
+        return linearLayout_row_week;
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews drawDayDetail(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
-        rowDayRv = showDays(context, rowDayRv, sharedPrefs, data);
-        rowDayRv = showTxtHolidays(context, rowDayRv, sharedPrefs, data);
-        rowDayRv = showWaxDays(context, rowDayRv, sharedPrefs, data);
-        rowDayRv = showImgWanpra(context, rowDayRv, sharedPrefs, data);
-        return rowDayRv;
+    public static void setDayDetail(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
+        showDays(context, relativeLayout_cell_day, data, sharedPrefs);
+        showTxtHolidays(context, relativeLayout_cell_day, data, sharedPrefs);
+        showWaxDays(context, relativeLayout_cell_day, data, sharedPrefs);
+        showImgWanpra(context, relativeLayout_cell_day, data, sharedPrefs);
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews showDays(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
-        rowDayRv.setTextViewText(R.id.tvDay, data.get(CalendarThaiAction.DAY).toString());
+    public static void showDays(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
+        TextView tvDay = (TextView)relativeLayout_cell_day.findViewById(R.id.tvDay);
+        tvDay.setText(data.get(CalendarThaiAction.DAY).toString());
         if (data.getBoolean(CalendarThaiAction.TO_MONTH)) {
             if(sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    rowDayRv.setTextViewTextSize(R.id.tvDay, TypedValue.COMPLEX_UNIT_SP, 100);
-                    rowDayRv.setViewPadding(R.id.tvDay, 0, -30, 0, -30);
-                } else {
-                    rowDayRv.setFloat(R.id.tvDay, "setTextSize", 100);
+                    tvDay.setTextSize(TypedValue.COMPLEX_UNIT_SP, 120);
+                }else{
+                    tvDay.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
                 }
             }
 
             if (data.getBoolean(CalendarThaiAction.TO_DAY)) {
-                rowDayRv.setInt(R.id.layRowDayContainer,"setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
-                rowDayRv.setTextColor(R.id.tvDay, sharedPrefs.getInt(CalendarThaiAction.TO_DAY_COLOR, R.integer.COLOR_TO_DAY));
+                if(!sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)) {
+                    relativeLayout_cell_day.setBackgroundColor(sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
+                }
+                tvDay.setTextColor(sharedPrefs.getInt(CalendarThaiAction.TO_DAY_COLOR, R.integer.COLOR_TO_DAY));
             }else if (data.getInt(CalendarThaiAction.DAY_IN_WEEK) == 0
                         || data.get(CalendarThaiAction.HOLIDAY) != null) {
-                rowDayRv.setTextColor(R.id.tvDay, sharedPrefs.getInt(CalendarThaiAction.HOLIDAY_COLOR, R.integer.COLOR_DAY_IN_HOLIDAY));
+                tvDay.setTextColor(sharedPrefs.getInt(CalendarThaiAction.HOLIDAY_COLOR, R.integer.COLOR_DAY_IN_HOLIDAY));
             }else{
-                rowDayRv.setTextColor(R.id.tvDay, sharedPrefs.getInt(CalendarThaiAction.TO_MONTH_COLOR, R.integer.COLOR_DAY_IN_MONTH));
+                tvDay.setTextColor(sharedPrefs.getInt(CalendarThaiAction.TO_MONTH_COLOR, R.integer.COLOR_DAY_IN_MONTH));
             }
         }else{
-            rowDayRv.setTextColor(R.id.tvDay, sharedPrefs.getInt(CalendarThaiAction.OTHER_MONTH_COLOR, R.integer.COLOR_DAY_OTHER_MONTH));
+            tvDay.setTextColor(sharedPrefs.getInt(CalendarThaiAction.OTHER_MONTH_COLOR, R.integer.COLOR_DAY_OTHER_MONTH));
         }
-        rowDayRv.setViewVisibility(R.id.tvDay, View.VISIBLE);
-        return rowDayRv;
+        tvDay.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews showTxtHolidays(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showTxtHolidays(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
+        TextView tvHoliday = (TextView) relativeLayout_cell_day.findViewById(R.id.tvHoliday);
         if (data.getBoolean(CalendarThaiAction.TO_MONTH) && data.get(CalendarThaiAction.HOLIDAY) != null) {
-            rowDayRv.setTextViewText(R.id.tvHoliday, data.get(CalendarThaiAction.HOLIDAY).toString());
-            rowDayRv.setTextColor(R.id.tvHoliday, sharedPrefs.getInt(CalendarThaiAction.TXT_HOLIDAY_COLOR, R.integer.COLOR_TXT_IN_HOLIDAY));
+            tvHoliday.setText(data.get(CalendarThaiAction.HOLIDAY).toString());
+            tvHoliday.setTextColor(sharedPrefs.getInt(CalendarThaiAction.TXT_HOLIDAY_COLOR, R.integer.COLOR_TXT_IN_HOLIDAY));
 
             if (sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    rowDayRv.setTextViewTextSize(R.id.tvHoliday, TypedValue.COMPLEX_UNIT_SP, 22);
-                } else {
-                    rowDayRv.setFloat(R.id.tvHoliday, "setTextSize", 22);
-                }
-                rowDayRv.setViewVisibility(R.id.tvHoliday, View.VISIBLE);
+                tvHoliday.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                tvHoliday.setVisibility(View.VISIBLE);
             } else if (sharedPrefs.getBoolean(CalendarThaiAction.SHOW_TXT_HOLIDAY, false)){
-                rowDayRv.setViewVisibility(R.id.tvHoliday, View.VISIBLE);
+                tvHoliday.setVisibility(View.VISIBLE);
             } else {
-                rowDayRv.setViewVisibility(R.id.tvHoliday, View.GONE);
+                tvHoliday.setVisibility(View.GONE);
             }
         }
-        return rowDayRv;
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews showWaxDays(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showWaxDays(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
+        TextView tvWax = (TextView) relativeLayout_cell_day.findViewById(R.id.tvWax);
         String str_wax = (data.get(CalendarThaiAction.WAXING).equals("WX") ? "ขึ้น " : "แรม ")
                 + data.get(CalendarThaiAction.WAXING_DAY) + " ค่ำ "
                 + "เดือน " + data.get(CalendarThaiAction.WAXING_MONTH_2);
 
-        rowDayRv.setTextViewText(R.id.tvWax, str_wax);
+        tvWax.setText(str_wax);
 
         if (data.getBoolean(CalendarThaiAction.TO_MONTH)) {
 //            if (data.getBoolean(CalendarThaiAction.TO_DAY)) {
-//                rowDayRv.setTextColor(R.id.tvWax, sharedPrefs.getInt(CalendarThaiAction.TO_DAY_COLOR, R.integer.COLOR_TO_DAY));
+//                relativeLayout_cell_day.setTextColor(R.id.tvWax, sharedPrefs.getInt(CalendarThaiAction.TO_DAY_COLOR, R.integer.COLOR_TO_DAY));
 //            } else if (data.getInt(CalendarThaiAction.DAY_IN_WEEK) == 0
 //                    || (sharedPrefs.getBoolean(CalendarThaiAction.SHOW_COLOR_HOLIDAY, true)
 //                    && data.get(CalendarThaiAction.HOLIDAY) != null)) {
-//                rowDayRv.setTextColor(R.id.tvWax, sharedPrefs.getInt(CalendarThaiAction.HOLIDAY_COLOR, R.integer.COLOR_DAY_IN_HOLIDAY));
+//                relativeLayout_cell_day.setTextColor(R.id.tvWax, sharedPrefs.getInt(CalendarThaiAction.HOLIDAY_COLOR, R.integer.COLOR_DAY_IN_HOLIDAY));
 //            } else {
-                rowDayRv.setTextColor(R.id.tvWax, sharedPrefs.getInt(CalendarThaiAction.TO_MONTH_COLOR, R.integer.COLOR_DAY_IN_MONTH));
+            tvWax.setTextColor(sharedPrefs.getInt(CalendarThaiAction.TO_MONTH_COLOR, R.integer.COLOR_DAY_IN_MONTH));
 //            }
         }else{
-            rowDayRv.setTextColor(R.id.tvWax, sharedPrefs.getInt(CalendarThaiAction.OTHER_MONTH_COLOR, R.integer.COLOR_DAY_OTHER_MONTH));
+            tvWax.setTextColor(sharedPrefs.getInt(CalendarThaiAction.OTHER_MONTH_COLOR, R.integer.COLOR_DAY_OTHER_MONTH));
         }
 
         if (sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                rowDayRv.setTextViewTextSize(R.id.tvWax, TypedValue.COMPLEX_UNIT_SP, 22);
-            } else {
-                rowDayRv.setFloat(R.id.tvWax, "setTextSize", 22);
-            }
-            rowDayRv.setViewVisibility(R.id.tvWax, View.VISIBLE);
+            tvWax.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+            tvWax.setVisibility(View.VISIBLE);
         } else if (sharedPrefs.getBoolean(CalendarThaiAction.SHOW_TXT_WAX, false)){
-            rowDayRv.setViewVisibility(R.id.tvWax, View.VISIBLE);
+            tvWax.setVisibility(View.VISIBLE);
         } else {
-            rowDayRv.setViewVisibility(R.id.tvWax, View.GONE);
+            tvWax.setVisibility(View.GONE);
         }
-        return rowDayRv;
     }
 
     @SuppressLint("NewApi")
-    public static RemoteViews showImgWanpra(Context context, RemoteViews rowDayRv, SharedPreferences sharedPrefs, Bundle data) {
+    public static void showImgWanpra(Context context, RelativeLayout relativeLayout_cell_day, Bundle data, SharedPreferences sharedPrefs) {
+        ImageView iv_wanpra = (ImageView) relativeLayout_cell_day.findViewById(R.id.iv_wanpra);
         if (data.getBoolean(CalendarThaiAction.TO_MONTH)) {
             if (sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
                     && data.getBoolean(CalendarThaiAction.WAXING_WANPRA)) {
-                rowDayRv.setImageViewResource(R.id.iv_wanpra, R.mipmap.ic_wanpra_xx);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    rowDayRv.setViewPadding(R.id.iv_wanpra, 0, 30, 0, 0);
-                }
-                rowDayRv.setViewVisibility(R.id.iv_wanpra, View.VISIBLE);
+                iv_wanpra.setImageResource(R.mipmap.ic_wanpra_xx);
+                iv_wanpra.setVisibility(View.VISIBLE);
             } else if (sharedPrefs.getBoolean(CalendarThaiAction.SHOW_WANPRA, false)
                     && data.getBoolean(CalendarThaiAction.WAXING_WANPRA)) {
-                rowDayRv.setImageViewResource(R.id.iv_wanpra, R.mipmap.ic_wanpra);
-                rowDayRv.setViewVisibility(R.id.iv_wanpra, View.VISIBLE);
+                iv_wanpra.setImageResource(R.mipmap.ic_wanpra);
+                iv_wanpra.setVisibility(View.VISIBLE);
             } else {
-                rowDayRv.setViewVisibility(R.id.iv_wanpra, View.GONE);
+                iv_wanpra.setVisibility(View.GONE);
             }
         }
-        return rowDayRv;
     }
 
-    public static RemoteViews drawWidgetDayDetail(Context context, RemoteViews rv, SharedPreferences sharedPrefs, Bundle data) {
-        //data.get(CalendarThaiAction.TO_MONTH)
-        rv.setViewVisibility(R.id.next_month_button, View.GONE);
-        rv.setViewVisibility(R.id.prev_month_button, View.GONE);
-
-        //Set title Month Year
-        rv.setTextViewText(R.id.month_label, CalendarCurrent.MONTHNAMETH[data.getInt(CalendarThaiAction.MONTH)] + " "
-                + CalendarCurrent.getYearTh(data.getInt(CalendarThaiAction.YEAR)));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rv.setTextViewTextSize(R.id.month_label, TypedValue.COMPLEX_UNIT_SP, 28);
-        } else {
-            rv.setFloat(R.id.month_label, "setTextSize", 28);
-        }
-
-        rv.removeAllViews(R.id.calendar);
+    public static void setDrawDayDetail(final Context context, final LinearLayout linearLayout_calendarthai, Bundle data, SharedPreferences sharedPrefs) {
+        LinearLayout.LayoutParams params = null;
 
         if(data.getBoolean(CalendarThaiAction.TO_DAY)) {
-            rv.setInt(R.id.container, "setBackgroundColor", sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
+            LinearLayout linearLayout_container_calendar = (LinearLayout)linearLayout_calendarthai.findViewById(R.id.container_calendar);
+            linearLayout_container_calendar.setBackgroundColor(sharedPrefs.getInt(CalendarThaiAction.TO_DAY_BACKGROUND_COLOR, R.integer.COLOR_TO_DAY_BACKGROUND));
         }
 
-        RemoteViews rowDayNamesRv = new RemoteViews(context.getPackageName(), R.layout.row_header);
-        RemoteViews cellDayNamesRv = new RemoteViews(context.getPackageName(), R.layout.cell_header);
-        cellDayNamesRv.setTextViewText(R.id.tvDayName, CalendarCurrent.DAYNAMESFULLTH[data.getInt(CalendarThaiAction.DAY_IN_WEEK)]);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            cellDayNamesRv.setTextViewTextSize(R.id.tvDayName, TypedValue.COMPLEX_UNIT_SP, 24);
-        } else {
-            cellDayNamesRv.setFloat(R.id.tvDayName, "setTextSize", 24);
-        }
-        rowDayNamesRv.addView(R.id.row_head_container, cellDayNamesRv);
-        rv.addView(R.id.calendar, rowDayNamesRv);
+        ImageButton ibtn_prev_month_button = (ImageButton)linearLayout_calendarthai.findViewById(R.id.prev_month_button);
+        ImageButton ibtn_next_month_button = (ImageButton)linearLayout_calendarthai.findViewById(R.id.next_month_button);
 
-        RemoteViews rowWeekRv = new RemoteViews(context.getPackageName(), R.layout.row_week);
-        RemoteViews rowDayRv = new RemoteViews(context.getPackageName(), R.layout.cell_day);
-        rowWeekRv.addView(R.id.row_week_container, WeekView.drawDayDetail(context, rowDayRv, sharedPrefs, data));
+        Button ibtn_month_label = (Button)linearLayout_calendarthai.findViewById(R.id.month_label);
+        ibtn_prev_month_button.setVisibility(View.GONE);
+        ibtn_next_month_button.setVisibility(View.GONE);
 
-        rv.addView(R.id.calendar, rowWeekRv);
+        //Set title Month Year
+        ibtn_month_label.setText(CalendarCurrent.MONTHNAMETH[data.getInt(CalendarThaiAction.MONTH)] + " "
+                + CalendarCurrent.getYearTh(data.getInt(CalendarThaiAction.YEAR)));
+        ibtn_month_label.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
 
-        rv.setOnClickPendingIntent(R.id.calendar,
-                PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, CalendarThaiWidget.class)
-                                .setAction(CalendarThaiAction.ACTION_LIST_DAY),
-                        PendingIntent.FLAG_UPDATE_CURRENT));
-        return rv;
+        LinearLayout linearLayout_calendar = (LinearLayout)linearLayout_calendarthai.findViewById(R.id.calendar);
+        //Clear content All R.id.calendar
+        linearLayout_calendar.removeAllViews();
+        linearLayout_calendar.setVisibility(View.VISIBLE);
+
+        //Set Days Name Header title
+        LayoutInflater inflater = (LayoutInflater)
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LinearLayout linearLayout_row_header = (LinearLayout)
+                inflater.inflate(R.layout.row_header, null);
+        LinearLayout linearLayout_cell_header = (LinearLayout)
+                inflater.inflate(R.layout.cell_header, null);
+
+        TextView tvDayName = (TextView)linearLayout_cell_header.findViewById(R.id.tvDayName);
+        tvDayName.setText(CalendarCurrent.DAYNAMESFULLTH[data.getInt(CalendarThaiAction.DAY_IN_WEEK)]);
+        tvDayName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, 4f);
+
+        linearLayout_row_header.addView(linearLayout_cell_header);
+        linearLayout_calendar.addView(linearLayout_row_header, params);
+
+        LinearLayout linearLayout_row_week = (LinearLayout)
+                inflater.inflate(R.layout.row_week, null);
+
+        RelativeLayout relativeLayout_cell_day = (RelativeLayout)
+                inflater.inflate(R.layout.cell_day, null);
+
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+
+        WeekView.setDayDetail(context, relativeLayout_cell_day, data, sharedPrefs);
+        linearLayout_row_week.addView(relativeLayout_cell_day,params);
+
+        linearLayout_calendar.addView(linearLayout_row_week, params);
+
+        linearLayout_calendar.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MonthView monthView = new MonthView();
+                        monthView.drawCalendar(context, linearLayout_calendarthai, CalendarThaiAction.ACTION_LIST_DAY, null);
+                    }
+                }
+        );
     }
 }
