@@ -52,7 +52,6 @@ public class WeekView {
                             monthView.drawCalendar(context, linearLayout_calendarthai, CalendarThaiAction.ACTION_DAY_DETAIL, days.data);
                         }
                     }
-
                 );
             }
 
