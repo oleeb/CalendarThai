@@ -45,7 +45,6 @@
         android:id="@+id/tvHoliday"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif-thin"
         android:textSize="6sp"
         android:visibility="gone" />
 
@@ -55,7 +54,6 @@
         android:id="@+id/tvWax"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/tvDay"
-        android:fontFamily="sans-serif-thin"
         android:layout_marginTop="-2dp"
         android:textSize="5sp" />
 

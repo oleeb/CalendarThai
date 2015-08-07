@@ -157,11 +157,11 @@ public class WeekView {
         if (data.getBoolean(CalendarThaiAction.TO_MONTH)) {
             if (sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
                     && data.getBoolean(CalendarThaiAction.WAXING_WANPRA)) {
-                iv_wanpra.setImageResource(R.mipmap.ic_wanpra_xx);
+                iv_wanpra.setImageResource(R.drawable.ic_wanpra_xx);
                 iv_wanpra.setVisibility(View.VISIBLE);
             } else if (sharedPrefs.getBoolean(CalendarThaiAction.SHOW_WANPRA, false)
                     && data.getBoolean(CalendarThaiAction.WAXING_WANPRA)) {
-                iv_wanpra.setImageResource(R.mipmap.ic_wanpra);
+                iv_wanpra.setImageResource(R.drawable.ic_wanpra);
                 iv_wanpra.setVisibility(View.VISIBLE);
             } else {
                 iv_wanpra.setVisibility(View.GONE);

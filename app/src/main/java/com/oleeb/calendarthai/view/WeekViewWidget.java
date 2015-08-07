@@ -144,14 +144,14 @@ public class WeekViewWidget {
         if (data.getBoolean(CalendarThaiAction.TO_MONTH)) {
             if (sharedPrefs.getBoolean(CalendarThaiAction.ACTION_DAY_DETAIL, false)
                     && data.getBoolean(CalendarThaiAction.WAXING_WANPRA)) {
-                rowDayRv.setImageViewResource(R.id.iv_wanpra, R.mipmap.ic_wanpra_xx);
+                rowDayRv.setImageViewResource(R.id.iv_wanpra, R.drawable.ic_wanpra_xx);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     rowDayRv.setViewPadding(R.id.iv_wanpra, 0, 30, 0, 0);
                 }
                 rowDayRv.setViewVisibility(R.id.iv_wanpra, View.VISIBLE);
             } else if (sharedPrefs.getBoolean(CalendarThaiAction.SHOW_WANPRA, false)
                     && data.getBoolean(CalendarThaiAction.WAXING_WANPRA)) {
-                rowDayRv.setImageViewResource(R.id.iv_wanpra, R.mipmap.ic_wanpra);
+                rowDayRv.setImageViewResource(R.id.iv_wanpra, R.drawable.ic_wanpra);
                 rowDayRv.setViewVisibility(R.id.iv_wanpra, View.VISIBLE);
             } else {
                 rowDayRv.setViewVisibility(R.id.iv_wanpra, View.GONE);
