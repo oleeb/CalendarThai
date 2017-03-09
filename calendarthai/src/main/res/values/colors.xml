@@ -1,0 +1,26 @@
+<resources>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#101010</color>
+    <color name="colorAccent">#E91E63</color>
+
+    <color name="background_calendar">#ff101010</color>
+    <color name="day_header_name">#ffffffff</color>
+    <color name="today_background">#ff2196F3</color>
+    <color name="day_in_month">#ffffffff</color>
+    <color name="day_in_holiday">#bbff0000</color>
+    <color name="day_in_important">#ff1565C0</color>
+    <color name="day_other_month">#ff6d6d6d</color>
+    <color name="day_in_holiday_other_month">#ff6d6d6d</color>
+    <color name="day_in_important_other_month">#ff6d6d6d</color>
+    <color name="black">#000000</color>
+    <color name="red_dark">#5fff0000</color>
+    <color name="white">#ffffff</color>
+    <color name="white_smoke">#fffcfcfc</color>
+    <color name="gray">#ff6d6d6d</color>
+    <color name="light_gray">#ffe1e1e1</color>
+    <color name="dark">#ff3C3C3C</color>
+    <color name="red_light">#ffff0059</color>
+    <color name="calendar_theme">#ff2196F3</color>
+    <color name="none_background">#00000000</color>
+    <color name="toolbar_transparent">#00ffffff</color>
+</resources>

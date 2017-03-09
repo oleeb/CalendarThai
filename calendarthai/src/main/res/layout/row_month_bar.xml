@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llRowMonthBar"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <TextView  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tvPrevMonth"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:background="@drawable/ic_previous_month" />
+
+    <TextView
+        android:id="@+id/tvTitleMonth"
+        android:fontFamily="sans-serif"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/day_header_name"
+        android:focusable="true"
+        android:textSize="@dimen/text_size_20sp" />
+
+    <TextView
+        android:id="@+id/tvCurrMonth"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:background="@drawable/ic_today_white_18dp" />
+
+    <TextView
+        android:id="@+id/tvNextMonth"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:background="@drawable/ic_next_month" />
+
+</LinearLayout>

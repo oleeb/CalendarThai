@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/title_widget">
+        <com.oleeb.calendarthai.colorpicker.ColorPickerPreference
+            android:key="@string/key_background_widget"
+            android:title="@string/title_background_widget"
+            android:defaultValue="@integer/COLOR_BACKGROUND_CALENDAR"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/about_settings">
+        <Preference
+            android:title="@string/title_version"
+            android:summary="@string/app_version" />
+    </PreferenceCategory>
+</PreferenceScreen>

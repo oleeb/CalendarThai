@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">CalendarThai</string>
+    <string name="app_version">v.1</string>
+
+    <string name="calendarthai_settings">CalendarThai Settings</string>
+    <string name="txt_ok">ตกลง</string>
+    <string name="txt_cancel">ยกเลิก</string>
+
+    <string name="txt_settings">ตั้งค่า</string>
+    <string name="txt_refresh">ดาวน์โหลดข้อมูลใหม่</string>
+
+    <string name="txt_year_BC">พ.ศ.</string>
+
+    <string name="txt_today">วันนี้</string>
+    <string name="txt_wanpra">วันพระ</string>
+    <string name="txt_waxing">ขึ้น</string>
+    <string name="txt_waning">แรม</string>
+    <string name="txt_subfix">ค่ำ</string>
+    <string name="txt_month">เดือน</string>
+
+    <string name="title_widget">ตั้งค่า widget</string>
+    <string name="key_background_widget">key_background_widget</string>
+    <string name="title_background_widget">สีพื้นหลัง</string>
+    <string name="summary_background_widget">สีพื้นหลัง</string>
+
+    <string name="about_settings">About this app</string>
+    <string name="title_version">Version</string>
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">@string/title_background_widget</string>
+
+    <!-- Data site -->
+    <string name="chk_inet_url">sites.google.com</string>
+    <string name="url_data_download">https://sites.google.com/site/datacalendarthai/calendar-thai-data.zip</string>
+    <string name="file_extract_buddhamoonphase">data-buddhamoonphase.txt</string>
+    <string name="file_extract_holiday">data-holiday.txt</string>
+
+    <string name="empty_view_text">ไม่มีรายการ</string>
+
+</resources>
