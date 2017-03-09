@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="CalendarThaiTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/MyActionBarTheme</item>
-        <item name="android:actionMenuTextColor">@color/smoke_white</item>
-    </style>
-</resources>
