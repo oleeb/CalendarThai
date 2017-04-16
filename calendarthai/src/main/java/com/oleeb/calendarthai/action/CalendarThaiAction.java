@@ -8,6 +8,8 @@ public class CalendarThaiAction {
             = "com.oleeb.calendarthai.action.ACTION_SETTING";
 
     /****************************** Actoin for widget****************************************/
+    public static final String APPWIDGET_SEQNO
+            = "com.oleeb.calendarthai.action.APPWIDGET_INDEX";
     public static final String ACTION_PREVIOUS_MONTH
             = "com.oleeb.calendarthai.action.PREVIOUS_MONTH";
     public static final String ACTION_NEXT_MONTH

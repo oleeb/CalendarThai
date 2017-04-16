@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oleeb.calendarthai.action.CalendarThaiAction;
 import com.oleeb.calendarthai.dao.CalendarOfMonthDao;
@@ -40,6 +41,15 @@ public class CalendarThai extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_calendar_thai);
+
+        DataOfDayDao dataOfDayDao = new DataOfDayDao(this);
+        if(!dataOfDayDao.chkDB()){
+            Toast.makeText(this, R.string.txt_please_wait_download, Toast.LENGTH_SHORT).show();
+            CalendarThaiAsyncTask task = new CalendarThaiAsyncTask(this);
+
+            task.execute();
+            Toast.makeText(this, R.string.txt_download_complete, Toast.LENGTH_SHORT).show();
+        }
 
         PreferenceManager.setDefaultValues(this, R.xml.calendarthai_settings, true);
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -92,9 +102,11 @@ public class CalendarThai extends AppCompatActivity {
                 //this.finish();
                 return true;
             case R.id.menu_action_refresh:
+                Toast.makeText(this, R.string.txt_please_wait_download, Toast.LENGTH_SHORT).show();
                 CalendarThaiAsyncTask task = new CalendarThaiAsyncTask(this);
 //                task.setProgressBar(progress_bar);
                 task.execute();
+                Toast.makeText(this, R.string.txt_download_complete, Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -108,7 +120,7 @@ public class CalendarThai extends AppCompatActivity {
     }
 
     private void drawWidgetListDay() {
-        Log.d("drawWidgetListDay", "");
+        //Log.d("drawWidgetListDay", "");
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.PREF_DATE , 1));
         cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.PREF_MONTH,
@@ -353,7 +365,7 @@ public class CalendarThai extends AppCompatActivity {
 
     @SuppressLint("LongLogTag")
     private void drawWidgetDetailDayToolbar(Bundle extras) {
-        Log.d("drawWidgetDetailDayToolbar", "");
+        //Log.d("drawWidgetDetailDayToolbar", "");
 
         Bundle data = extras.getBundle(CalendarThaiAction.EXTRA_DAY_DETAIL);
 
@@ -410,7 +422,7 @@ public class CalendarThai extends AppCompatActivity {
     }
 
     private void drawWidgetEventDetail(Bundle extras){
-        Log.d("drawWidgetEventDetail", "Bundle :" + extras);
+        //Log.d("drawWidgetEventDetail", "Bundle :" + extras);
         Bundle data = extras.getBundle(CalendarThaiAction.EXTRA_DAY_DETAIL);
         LinearLayout ll_row_event;
         ll_row_event = (LinearLayout)findViewById(R.id.llRowEvent);
@@ -537,7 +549,7 @@ public class CalendarThai extends AppCompatActivity {
     }
 
     private void drawWidgetListMonth() {
-        Log.d("drawWidgetListMonth", "");
+        //Log.d("drawWidgetListMonth", "");
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.PREF_DATE, 1));
@@ -655,7 +667,7 @@ public class CalendarThai extends AppCompatActivity {
     }
 
     private void drawWidgetListYear() {
-        Log.d("drawWidgetListYear", "");
+        //Log.d("drawWidgetListYear", "");
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.PREF_DATE, 1));
         cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.PREF_MONTH, cal.get(Calendar.MONTH)));
@@ -672,10 +684,10 @@ public class CalendarThai extends AppCompatActivity {
         int beginYear = CalendarUtils.getYearTh(cal.get(Calendar.YEAR)) - roundOfYear;
         int toYear = CalendarUtils.getYearTh(cal.get(Calendar.YEAR));
 
-//        Log.d("colOfYear",""+colOfYear);
-//        Log.d("roundOfYear",""+roundOfYear);
-//        Log.d("beginYear",""+beginYear);
-//        Log.d("toYear",""+toYear);
+//        //Log.d("colOfYear",""+colOfYear);
+//        //Log.d("roundOfYear",""+roundOfYear);
+//        //Log.d("beginYear",""+beginYear);
+//        //Log.d("toYear",""+toYear);
 
         //month bar
         LinearLayout ll_row_month_bar = (LinearLayout) getLayoutInflater().inflate(
@@ -874,10 +886,10 @@ public class CalendarThai extends AppCompatActivity {
         } else if (CalendarThaiAction.ACTION_DETAIL_DAY.equals(action) && extras != null) {
 //            drawWidgetDetailDay(context, appWidgetId, extras);
         } else if (CalendarThaiAction.ACTION_LIST_MONTH.equals(action)) {
-            Log.d("ACTION_LIST_MONTH extras", "" + (extras != null && extras.containsKey(CalendarThaiAction.EXTRA_YEAR_DETAIL)));
+            //Log.d("ACTION_LIST_MONTH extras", "" + (extras != null && extras.containsKey(CalendarThaiAction.EXTRA_YEAR_DETAIL)));
             if(extras != null && extras.containsKey(CalendarThaiAction.EXTRA_YEAR_DETAIL)) {
                 int year = extras.getInt(CalendarThaiAction.EXTRA_YEAR_DETAIL);
-                Log.d("ACTION_LIST_MONTH year",""+year);
+                //Log.d("ACTION_LIST_MONTH year",""+year);
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.PREF_DATE, 1));
                 cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.PREF_MONTH, cal.get(Calendar.MONTH)));

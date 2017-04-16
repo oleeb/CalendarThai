@@ -48,20 +48,20 @@ public class HolidayDatabase {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(Holiday.SQL_CREATE);
-            Log.d(TAG, "onCreate TABLE " + Holiday.TB_NAME);
+            //Log.d(TAG, "onCreate TABLE " + Holiday.TB_NAME);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + Holiday.TB_NAME);
-            Log.d(TAG, "onUpgrade DROP TABLE IF EXISTS " + Holiday.TB_NAME);
+            //Log.d(TAG, "onUpgrade DROP TABLE IF EXISTS " + Holiday.TB_NAME);
             onCreate(db);
         }
 
         @Override
         public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + Holiday.TB_NAME);
-            Log.d(TAG, "onDowngrade DROP TABLE IF EXISTS " + Holiday.TB_NAME);
+            //Log.d(TAG, "onDowngrade DROP TABLE IF EXISTS " + Holiday.TB_NAME);
             onCreate(db);
         }
 

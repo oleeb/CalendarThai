@@ -23,13 +23,14 @@ public class CalendarThaiReceiver extends BroadcastReceiver {
         if(action.equals(Intent.ACTION_INSTALL_PACKAGE)
                 || action.equals(Intent.ACTION_MY_PACKAGE_REPLACED)
                 || action.equals(Intent.ACTION_PACKAGE_ADDED)
-                || action.equals(Intent.ACTION_PACKAGE_REPLACED)){
-            //set Schedule Alarm
-            CalendarThaiAlarmManager.startAlarmManager(context);
+                || action.equals(Intent.ACTION_PACKAGE_REPLACED)
+                || action.equals(Intent.ACTION_BOOT_COMPLETED)){
+                //set Schedule Alarm
+                CalendarThaiAlarmManager.startAlarmManager(context);
         }else if(action.equals(CalendarThaiAction.ACTION_NOTIFICATION)){
-            CalendarThaiNotification.createNotification(context);
+                CalendarThaiNotification.createNotification(context);
         }else if(action.equals(intent.ACTION_PACKAGE_REMOVED)
-                || action.equals(intent.ACTION_UNINSTALL_PACKAGE)){
+                    || action.equals(intent.ACTION_UNINSTALL_PACKAGE)){
 
         }
     }

@@ -3,8 +3,11 @@ package com.oleeb.calendarthai.dao;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.oleeb.calendarthai.action.CalendarThaiAction;
+import com.oleeb.calendarthai.buddhamoonphase.BuddhaMoonPhase;
+import com.oleeb.calendarthai.buddhamoonphase.BuddhaMoonPhaseProvider;
 import com.oleeb.calendarthai.buddhamoonphase.CalculateBuddhaMoonPhase;
 import com.oleeb.calendarthai.dto.DataOfDayDto;
 import com.oleeb.calendarthai.holiday.Holiday;
@@ -22,6 +25,9 @@ public class DataOfDayDao {
     private Calendar cal;
     private CalculateBuddhaMoonPhase calculateBuddhaMoonPhase;
     DataOfDayDto dataOfDayDto;
+    public DataOfDayDao(Context context){
+        this.context = context;
+    }
     public DataOfDayDao(Context context, Calendar cal){
         this.context = context;
         this.cal = cal;
@@ -40,6 +46,27 @@ public class DataOfDayDao {
         return dataOfDayDto;
     }
 
+    public boolean chkDB(){
+        boolean chkDB = false;
+        Cursor cursor = this.context.getContentResolver().query(BuddhaMoonPhaseProvider.CONTENT_URI,
+                new String[]{
+                        BuddhaMoonPhase.COL_BASEYAER,
+                        BuddhaMoonPhase.COL_BEGINDATE,
+                        BuddhaMoonPhase.COL_ENDDATE,
+                        BuddhaMoonPhase.COL_PHASEYEAR
+                },
+                BuddhaMoonPhase.COL_BASEYAER + "=?",
+                new String[]{
+                        "1759"
+                },
+                null);
+        if(cursor != null){
+            chkDB = true;
+            cursor.close();
+        }
+        //Log.d("chkDB",""+chkDB);
+        return chkDB;
+    }
     private void setBuddhaMoonPhase(){
         //Set Buddha Moon Phase
         this.calculateBuddhaMoonPhase = new CalculateBuddhaMoonPhase();

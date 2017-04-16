@@ -48,20 +48,20 @@ public class BuddhaMoonPhaseDatabase {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(BuddhaMoonPhase.SQL_CREATE);
-            Log.d(TAG, "onCreate TABLE " + BuddhaMoonPhase.TB_NAME);
+            //Log.d(TAG, "onCreate TABLE " + BuddhaMoonPhase.TB_NAME);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + BuddhaMoonPhase.TB_NAME);
-            Log.d(TAG, "onUpgrade DROP TABLE IF EXISTS " + BuddhaMoonPhase.TB_NAME);
+            //Log.d(TAG, "onUpgrade DROP TABLE IF EXISTS " + BuddhaMoonPhase.TB_NAME);
             onCreate(db);
         }
 
         @Override
         public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + BuddhaMoonPhase.TB_NAME);
-            Log.d(TAG, "onDowngrade DROP TABLE IF EXISTS " + BuddhaMoonPhase.TB_NAME);
+            //Log.d(TAG, "onDowngrade DROP TABLE IF EXISTS " + BuddhaMoonPhase.TB_NAME);
             onCreate(db);
         }
 

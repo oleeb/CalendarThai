@@ -19,7 +19,7 @@ public class CalendarThaiAlarmManager {
     private static AlarmManager alarmMgr;
     private static PendingIntent alarmIntent;
     public static void startAlarmManager(Context context){
-        Log.d("" + CalendarThaiAlarmManager.class, "is null :"+(alarmMgr == null));
+        //Log.d("" + CalendarThaiAlarmManager.class, "is null :"+(alarmMgr == null));
         if(alarmMgr == null) {
             //call ServiceIntent CalendarThaiSyncData
             Intent mServiceIntent = new Intent(context, CalendarThaiSyncDataService.class);
@@ -36,14 +36,10 @@ public class CalendarThaiAlarmManager {
 
             // With setInexactRepeating(), you have to use one of the AlarmManager interval
             // constants--in this case, AlarmManager.INTERVAL_DAY.
-            Log.d("" + CalendarThaiAlarmManager.class, "TimeInMillis :"+(calendar.getTimeInMillis()));
+            //Log.d("" + CalendarThaiAlarmManager.class, "TimeInMillis :"+(calendar.getTimeInMillis()));
             alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, alarmIntent);
-//            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                    1000*60*60*24, alarmIntent);
-//            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                    1000*60*2, alarmIntent);
         }
     }
 }

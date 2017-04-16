@@ -16,25 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
 
-        <activity
-            android:name=".CalendarThai"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".CalendarThaiSettingsActivity"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".CalendarThai"
-            android:screenOrientation="portrait">
-        </activity>
-
         <provider
             android:name=".holiday.HolidayProvider"
             android:authorities="com.oleeb.calendarthai.holiday.HolidayProvider" />
@@ -79,8 +60,27 @@
         </receiver>
 
         <service
-            android:name=".service.CalendarThaiSyncDataService"
-            android:enabled="true"/>
+            android:enabled="true"
+            android:name=".service.CalendarThaiSyncDataService" />
+
+        <activity
+            android:name=".CalendarThai"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".CalendarThaiSettingsActivity"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".CalendarThai"
+            android:screenOrientation="portrait">
+        </activity>
 
     </application>
 

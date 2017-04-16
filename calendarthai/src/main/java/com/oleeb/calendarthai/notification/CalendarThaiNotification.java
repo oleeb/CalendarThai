@@ -25,11 +25,11 @@ import java.util.Calendar;
  */
 public class CalendarThaiNotification {
     public static void createNotification(Context context) {
-        Log.d("" + CalendarThaiNotification.class, "createNotification");
+        //Log.d("" + CalendarThaiNotification.class, "createNotification");
         Calendar calendar = Calendar.getInstance();
         DataOfDayDao dataOfDayDao = new DataOfDayDao(context, calendar);
         DataOfDayDto dataOfDayDto = dataOfDayDao.getData();
-//        Log.d("" + CalendarThaiNotification.class, "mapDays:"+mapDays);
+//        //Log.d("" + CalendarThaiNotification.class, "mapDays:"+mapDays);
 
         if (dataOfDayDto != null && dataOfDayDto.getData() != null) {
             Bundle mapDays = dataOfDayDto.getData();
@@ -55,7 +55,7 @@ public class CalendarThaiNotification {
                 Intent intent = new Intent(context, CalendarThai.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-//                Log.d("" + CalendarThaiNotification.class, "createNotification Wanpra....");
+//                //Log.d("" + CalendarThaiNotification.class, "createNotification Wanpra....");
                 String str_wax = (mapDays.getString(CalendarThaiAction.WAXING)
                         .equals(CalendarThaiAction.WAXING) ?
                         context.getResources().getString(R.string.txt_waxing) :
@@ -107,7 +107,7 @@ public class CalendarThaiNotification {
                 Intent intent = new Intent(context, CalendarThai.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-//                Log.d("" + CalendarThaiNotification.class, "createNotification Holiday....");
+//                //Log.d("" + CalendarThaiNotification.class, "createNotification Holiday....");
                 Notification notification =
                         new NotificationCompat.Builder(context)
                                 .setContentTitle(context.getResources().getString(R.string.app_name))

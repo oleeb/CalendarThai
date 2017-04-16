@@ -8,13 +8,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RemoteViews;
 
 import com.oleeb.calendarthai.action.CalendarThaiAction;
@@ -36,24 +34,27 @@ public class CalendarThaiWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        Log.d(CalendarThaiWidget.class.getName(), "onUpdate appWidgetIds:" + (appWidgetIds != null ? appWidgetIds.length : 0));
+        //Log.d(CalendarThaiWidget.class.getName(), "onUpdate appWidgetIds:" + (appWidgetIds != null ? appWidgetIds.length : 0));
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         String action = intent.getAction();
-        Log.d("onReceive action", "" + action);
+        //Log.d("onReceive action", "" + action);
         Bundle extras = null;
         int appWidgetId = 0;
+        short appWidgetSeqNo = 0;
         if (action != null) {
             extras = intent.getExtras();
-            Log.d("onReceive extras", "" + extras);
+            //Log.d("onReceive extras", "" + extras);
             if(extras != null) {
                 appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+                appWidgetSeqNo = extras.getShort(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo);
             }
         }
-
+        //Log.d("onReceive appWidgetId", "" + appWidgetId);
+        //Log.d("onReceive appWidgetSeqNo", "" + appWidgetSeqNo);
         if(AppWidgetManager.ACTION_APPWIDGET_ENABLED.equals(action)){
             PreferenceManager.setDefaultValues(context, R.xml.calendarthai_settings, true);
         }else if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
@@ -63,66 +64,66 @@ public class CalendarThaiWidget extends AppWidgetProvider {
         } else if (CalendarThaiAction.ACTION_PREVIOUS_MONTH.equals(action)) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
-            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
+            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
             cal.add(Calendar.MONTH, -1);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs
                         .edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .apply();
             } else {
                 sharedPrefs.edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .commit();
             }
-            drawWidgetListDay(context, appWidgetId);
+            drawWidgetListDay(context, appWidgetId, appWidgetSeqNo);
         } else if (CalendarThaiAction.ACTION_NEXT_MONTH.equals(action)) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
-            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
+            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
             cal.add(Calendar.MONTH, 1);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs
                         .edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .apply();
             } else {
                 sharedPrefs
                         .edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .commit();
             }
-            drawWidgetListDay(context, appWidgetId);
+            drawWidgetListDay(context, appWidgetId, appWidgetSeqNo);
         } else if (CalendarThaiAction.ACTION_RESET_MONTH.equals(action)) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs
                         .edit()
-                        .remove(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId)
-                        .remove(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId)
-                        .remove(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId)
+                        .remove(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo)
+                        .remove(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo)
+                        .remove(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo)
                         .apply();
             } else {
                 sharedPrefs
                         .edit()
-                        .remove(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId)
-                        .remove(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId)
-                        .remove(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId)
+                        .remove(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo)
+                        .remove(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo)
+                        .remove(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo)
                         .commit();
             }
-            drawWidgetListDay(context, appWidgetId);
+            drawWidgetListDay(context, appWidgetId, appWidgetSeqNo);
         } else if (CalendarThaiAction.ACTION_LIST_DAY.equals(action)) {
             if(extras != null && extras.containsKey(CalendarThaiAction.EXTRA_MONTH_DETAIL)) {
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -130,102 +131,102 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                 int month = extras.getInt(CalendarThaiAction.EXTRA_MONTH_DETAIL);
 
                 Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
+                cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
                 cal.set(Calendar.MONTH, month);
-                cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+                cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     sharedPrefs
                             .edit()
-                            .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                            .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                            .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                             .apply();
                 } else {
                     sharedPrefs.edit()
-                            .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                            .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                            .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                             .commit();
                 }
             }
-            drawWidgetListDay(context, appWidgetId);
+            drawWidgetListDay(context, appWidgetId, appWidgetSeqNo);
         } else if (CalendarThaiAction.ACTION_DETAIL_DAY.equals(action) && extras != null) {
-            drawWidgetDetailDay(context, appWidgetId, extras);
+            drawWidgetDetailDay(context, appWidgetId, appWidgetSeqNo, extras);
         } else if (CalendarThaiAction.ACTION_LIST_MONTH.equals(action)) {
-            Log.d("ACTION_LIST_MONTH extras",""+(extras != null && extras.containsKey(CalendarThaiAction.EXTRA_YEAR_DETAIL)));
+            //Log.d("ACTION_LIST_MONTH extras",""+(extras != null && extras.containsKey(CalendarThaiAction.EXTRA_YEAR_DETAIL)));
             if(extras != null && extras.containsKey(CalendarThaiAction.EXTRA_YEAR_DETAIL)) {
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
                 int year = extras.getInt(CalendarThaiAction.EXTRA_YEAR_DETAIL);
-                Log.d("ACTION_LIST_MONTH year",""+year);
+                //Log.d("ACTION_LIST_MONTH year",""+year);
                 Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-                cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
+                cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+                cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
                 cal.set(Calendar.YEAR, year);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     sharedPrefs
                             .edit()
-                            .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                            .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                            .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                             .apply();
                 } else {
                     sharedPrefs.edit()
-                            .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                            .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                            .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                            .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                             .commit();
                 }
             }
-            drawWidgetListMonth(context, appWidgetId);
+            drawWidgetListMonth(context, appWidgetId, appWidgetSeqNo);
         } else if (CalendarThaiAction.ACTION_PREVIOUS_YEAR.equals(action)) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
-            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
+            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
             cal.add(Calendar.YEAR, -1);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs
                         .edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .apply();
             } else {
                 sharedPrefs.edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .commit();
             }
-            drawWidgetListMonth(context, appWidgetId);
+            drawWidgetListMonth(context, appWidgetId, appWidgetSeqNo);
         } else if (CalendarThaiAction.ACTION_NEXT_YEAR.equals(action)) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
-            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
+            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
             cal.add(Calendar.YEAR, 1);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs
                         .edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .apply();
             } else {
                 sharedPrefs
                         .edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .commit();
             }
-            drawWidgetListMonth(context, appWidgetId);
+            drawWidgetListMonth(context, appWidgetId, appWidgetSeqNo);
         } else if (CalendarThaiAction.ACTION_LIST_YEAR.equals(action)) {
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-            drawWidgetListYear(context, appWidgetId);
+            //SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+            drawWidgetListYear(context, appWidgetId, appWidgetSeqNo);
         } else if (CalendarThaiAction.ACTION_PREVIOUS_YEAR_GROUP.equals(action)
                 && extras != null && extras.containsKey(CalendarThaiAction.WIDGET_NUM_YEAR_GROUP)) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -233,26 +234,26 @@ public class CalendarThaiWidget extends AppWidgetProvider {
             int numOfYear = extras.getInt(CalendarThaiAction.WIDGET_NUM_YEAR_GROUP, 20);
 
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
-            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
+            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
             cal.add(Calendar.YEAR, -numOfYear);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs
                         .edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .apply();
             } else {
                 sharedPrefs.edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .commit();
             }
-            drawWidgetListYear(context, appWidgetId);
+            drawWidgetListYear(context, appWidgetId, appWidgetSeqNo);
         } else if (CalendarThaiAction.ACTION_NEXT_YEAR_GROUP.equals(action)
                 && extras != null && extras.containsKey(CalendarThaiAction.WIDGET_NUM_YEAR_GROUP)) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -260,42 +261,42 @@ public class CalendarThaiWidget extends AppWidgetProvider {
             int numOfYear = extras.getInt(CalendarThaiAction.WIDGET_NUM_YEAR_GROUP, 20);
 
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
-            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+            cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+            cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
+            cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
             cal.add(Calendar.YEAR, numOfYear);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs
                         .edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .apply();
             } else {
                 sharedPrefs
                         .edit()
-                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, cal.get(Calendar.DATE))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH))
-                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, cal.get(Calendar.DATE))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH))
+                        .putInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR))
                         .commit();
             }
-            drawWidgetListYear(context, appWidgetId);
+            drawWidgetListYear(context, appWidgetId, appWidgetSeqNo);
         } else if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 sharedPrefs
                         .edit()
-                        .remove(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId)
-                        .remove(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId)
-                        .remove(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId)
+                        .remove(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo)
+                        .remove(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo)
+                        .remove(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo)
                         .apply();
             } else {
                 sharedPrefs
                         .edit()
-                        .remove(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId)
-                        .remove(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId)
-                        .remove(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId)
+                        .remove(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo)
+                        .remove(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo)
+                        .remove(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo)
                         .commit();
             }
         } else if (AppWidgetManager.ACTION_APPWIDGET_DISABLED.equals(action)) {
@@ -307,27 +308,29 @@ public class CalendarThaiWidget extends AppWidgetProvider {
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
                                           int appWidgetId, Bundle newOptions) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
-        Log.d("onAppWidgetOptionsChanged appWidgetId", "" + appWidgetId);
+        //Log.d("onAppWidgetOptionsChanged appWidgetId", "" + appWidgetId);
     }
 
     public void redrawWidgets(Context context) {
-        //Log.d("CalendarThaiWidget redrawWidgets", "" + context);
+        ////Log.d("CalendarThaiWidget redrawWidgets", "" + context);
+        short appWidgetSeqNo = 0;
         int[] appWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(
                 new ComponentName(context, this.getClass()));
         for (int appWidgetId : appWidgetIds) {
-            drawWidgetListDay(context, appWidgetId);
+            drawWidgetListDay(context, appWidgetId, appWidgetSeqNo++);
         }
     }
 
-    private void drawWidgetListDay(Context context, int appWidgetId) {
-        Log.d("drawWidgetListDay appWidgetId", "" + appWidgetId);
+    private void drawWidgetListDay(Context context, int appWidgetId, short appWidgetSeqNo) {
+        //Log.d("drawWidgetListDay appWidgetId", "" + appWidgetId);
+        //Log.d("drawWidgetListDay appWidgetSeqNo", "" + appWidgetSeqNo);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-        cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
-        cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+        cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+        cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
+        cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
 
         CalendarOfMonthDao calendarOfMonthDao = new CalendarOfMonthDao(cal);
         CalendarOfMonthDto calendarOfMonthDto = calendarOfMonthDao.getCalendar();
@@ -392,11 +395,14 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                 }
                 //sert To day Background
                 if (isToday) {// to day
-                    rv_cell_days.setInt(R.id.layCellDayContainer, "setBackgroundColor", context.getResources().getInteger(R.color.today_background));
+                    rv_cell_days.setInt(R.id.layCellDayContainer, "setBackgroundColor",
+                            context.getResources().getInteger(R.color.today_background));
 //                    rv_cell_days.setInt(R.id.layCellDayContainer, "setBackgroundResource", R.drawable.shape_circle);
                 }
                 //set views text holidays and important day
-                if(dataOfDayDto.getData() != null  && dataOfDayDto.getData().getString(CalendarThaiAction.IMPORTANT_DESC) != null && !dataOfDayDto.getData().getString(CalendarThaiAction.IMPORTANT_DESC).equals("")) {
+                if(dataOfDayDto.getData() != null  && dataOfDayDto.getData().getString(
+                        CalendarThaiAction.IMPORTANT_DESC) != null && !dataOfDayDto.getData().getString(
+                                CalendarThaiAction.IMPORTANT_DESC).equals("")) {
                     rv_cell_days.setTextViewText(R.id.tvHoliday, dataOfDayDto.getData().getString(CalendarThaiAction.IMPORTANT_DESC));
                     rv_cell_days.setViewVisibility(R.id.tvHoliday, View.VISIBLE);
                     //set text color
@@ -443,12 +449,16 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                     rv_cell_days.setViewVisibility(R.id.ivWanpra, View.VISIBLE);
                 }
                 //btn control
+
                 if (inMonth) {
                     rv_cell_days.setOnClickPendingIntent(R.id.layCellDayContainer,
-                            PendingIntent.getBroadcast(context, Integer.parseInt(appWidgetId + "" + cal.get(Calendar.YEAR) + "" + cal.get(Calendar.DAY_OF_YEAR)),
+                            PendingIntent.getBroadcast(context, Integer.parseInt(appWidgetSeqNo
+                                            + String.valueOf(cal.get(Calendar.YEAR))
+                                            + String.valueOf( cal.get(Calendar.DAY_OF_YEAR))),
                                     new Intent(context, getClass())
                                             .setAction(CalendarThaiAction.ACTION_DETAIL_DAY)
                                             .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                            .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo)
                                             .putExtra(CalendarThaiAction.EXTRA_DAY_DETAIL, dataOfDayDto.getData()),
                                     PendingIntent.FLAG_UPDATE_CURRENT));
                 }
@@ -465,43 +475,47 @@ public class CalendarThaiWidget extends AppWidgetProvider {
         //btn control
         if(cal.get(Calendar.YEAR) > context.getResources().getInteger(R.integer.CAL_YEAR_MIN)) {
             rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvPrevMonth,
-                    PendingIntent.getBroadcast(context, appWidgetId,
+                    PendingIntent.getBroadcast(context, appWidgetSeqNo,
                             new Intent(context, getClass())
                                     .setAction(CalendarThaiAction.ACTION_PREVIOUS_MONTH)
-                                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                    .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                             PendingIntent.FLAG_UPDATE_CURRENT));
         }else{
             rv_activity_calendar_thai.setViewVisibility(R.id.tvPrevMonth, View.INVISIBLE);
         }
         if(cal.get(Calendar.YEAR) < context.getResources().getInteger(R.integer.CAL_YEAR_MAX)) {
             rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvNextMonth,
-                    PendingIntent.getBroadcast(context, appWidgetId,
+                    PendingIntent.getBroadcast(context, appWidgetSeqNo,
                             new Intent(context, getClass())
                                     .setAction(CalendarThaiAction.ACTION_NEXT_MONTH)
-                                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                    .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                             PendingIntent.FLAG_UPDATE_CURRENT));
         }else{
             rv_activity_calendar_thai.setViewVisibility(R.id.tvNextMonth, View.INVISIBLE);
         }
         rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvCurrMonth,
-                PendingIntent.getBroadcast(context, appWidgetId,
+                PendingIntent.getBroadcast(context, appWidgetSeqNo,
                         new Intent(context, getClass())
                                 .setAction(CalendarThaiAction.ACTION_RESET_MONTH)
-                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                         PendingIntent.FLAG_UPDATE_CURRENT));
 
         rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvTitleMonth,
-                PendingIntent.getBroadcast(context, appWidgetId,
+                PendingIntent.getBroadcast(context, appWidgetSeqNo,
                         new Intent(context, getClass())
                                 .setAction(CalendarThaiAction.ACTION_LIST_MONTH)
-                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                         PendingIntent.FLAG_UPDATE_CURRENT));
 
         appWidgetManager.updateAppWidget(appWidgetId, rv_activity_calendar_thai);
     }
 
-    private void drawWidgetDetailDay(Context context, final int appWidgetId, Bundle extras) {
-        Log.d("drawWidgetDetailDay appWidgetId", "" + appWidgetId);
+    private void drawWidgetDetailDay(Context context, final int appWidgetId, short appWidgetSeqNo, Bundle extras) {
+        //Log.d("drawWidgetDetailDay appWidgetId", "" + appWidgetId);
         Bundle data = extras.getBundle(CalendarThaiAction.EXTRA_DAY_DETAIL);
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -538,7 +552,9 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                 rv_cell_day_detail.setViewVisibility(R.id.tvWax, View.VISIBLE);
             }
             //month year
-            rv_cell_day_detail.setTextViewText(R.id.tvTitleMonth, CalendarUtils.MONTHNAMETH[data.getInt(CalendarThaiAction.MONTH)]+" "+CalendarUtils.getYearTh(data.getInt(CalendarThaiAction.YEAR)));
+            rv_cell_day_detail.setTextViewText(R.id.tvTitleMonth,
+                    CalendarUtils.MONTHNAMETH[data.getInt(CalendarThaiAction.MONTH)]
+                            +" "+CalendarUtils.getYearTh(data.getInt(CalendarThaiAction.YEAR)));
             rv_cell_day_detail.setTextColor(R.id.tvTitleMonth, context.getResources().getInteger(R.color.day_in_month));
             //day name
             rv_cell_day_detail.setTextViewText(R.id.tvDayName, CalendarUtils.DAYNAMESFULLTH[data.getInt(CalendarThaiAction.DAY_OF_WEEK) - 1]);
@@ -552,10 +568,11 @@ public class CalendarThaiWidget extends AppWidgetProvider {
         }
 
         rv_cell_day_detail.setOnClickPendingIntent(R.id.llDetailDayContainer,
-                PendingIntent.getBroadcast(context, appWidgetId,
+                PendingIntent.getBroadcast(context, appWidgetSeqNo,
                         new Intent(context, getClass())
                                 .setAction(CalendarThaiAction.ACTION_LIST_DAY)
-                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                         PendingIntent.FLAG_UPDATE_CURRENT));
         //set calendar background color
         rv_cell_day_detail.setInt(R.id.llDetailDayContainer, "setBackgroundColor",
@@ -665,15 +682,15 @@ public class CalendarThaiWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, rv_activity_calendar_thai);
     }
 
-    private void drawWidgetListMonth(Context context, int appWidgetId) {
-        Log.d("drawWidgetListMonth appWidgetId", "" + appWidgetId);
+    private void drawWidgetListMonth(Context context, int appWidgetId, short appWidgetSeqNo) {
+        //Log.d("drawWidgetListMonth appWidgetId", "" + appWidgetId);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-        cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
-        cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+        cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+        cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
+        cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
 
         RemoteViews rv_activity_calendar_thai;
         rv_activity_calendar_thai = new RemoteViews(context.getPackageName(), R.layout.activity_calendar_thai);
@@ -703,10 +720,11 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                 }
                 //btn control
                 rv_cell_month.setOnClickPendingIntent(R.id.layCellMonthContainer,
-                        PendingIntent.getBroadcast(context, Integer.parseInt(appWidgetId + "" + cal.get(Calendar.YEAR) + "" + index_month),
+                        PendingIntent.getBroadcast(context, Integer.parseInt(appWidgetSeqNo + String.valueOf(cal.get(Calendar.YEAR)) + String.valueOf( index_month)),
                                 new Intent(context, getClass())
                                         .setAction(CalendarThaiAction.ACTION_LIST_DAY)
                                         .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                        .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo)
                                         .putExtra(CalendarThaiAction.EXTRA_MONTH_DETAIL, index_month),
                                 PendingIntent.FLAG_UPDATE_CURRENT));
 
@@ -721,50 +739,54 @@ public class CalendarThaiWidget extends AppWidgetProvider {
         //btn control
         if(cal.get(Calendar.YEAR) > context.getResources().getInteger(R.integer.CAL_YEAR_MIN)) {
             rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvPrevMonth,
-                    PendingIntent.getBroadcast(context, appWidgetId,
+                    PendingIntent.getBroadcast(context, appWidgetSeqNo,
                             new Intent(context, getClass())
                                     .setAction(CalendarThaiAction.ACTION_PREVIOUS_YEAR)
-                                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                    .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                             PendingIntent.FLAG_UPDATE_CURRENT));
         }else{
             rv_activity_calendar_thai.setViewVisibility(R.id.tvPrevMonth, View.INVISIBLE);
         }
         if(cal.get(Calendar.YEAR) < context.getResources().getInteger(R.integer.CAL_YEAR_MAX)) {
             rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvNextMonth,
-                    PendingIntent.getBroadcast(context, appWidgetId,
+                    PendingIntent.getBroadcast(context, appWidgetSeqNo,
                             new Intent(context, getClass())
                                     .setAction(CalendarThaiAction.ACTION_NEXT_YEAR)
-                                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                    .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                             PendingIntent.FLAG_UPDATE_CURRENT));
         }else{
             rv_activity_calendar_thai.setViewVisibility(R.id.tvNextMonth, View.INVISIBLE);
         }
         rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvCurrMonth,
-                PendingIntent.getBroadcast(context, appWidgetId,
+                PendingIntent.getBroadcast(context, appWidgetSeqNo,
                         new Intent(context, getClass())
                                 .setAction(CalendarThaiAction.ACTION_RESET_MONTH)
-                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                         PendingIntent.FLAG_UPDATE_CURRENT));
 
         rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvTitleMonth,
-                PendingIntent.getBroadcast(context, appWidgetId,
+                PendingIntent.getBroadcast(context, appWidgetSeqNo,
                         new Intent(context, getClass())
                                 .setAction(CalendarThaiAction.ACTION_LIST_YEAR)
-                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                         PendingIntent.FLAG_UPDATE_CURRENT));
 
         appWidgetManager.updateAppWidget(appWidgetId, rv_activity_calendar_thai);
     }
 
-    private void drawWidgetListYear(Context context, int appWidgetId) {
-        Log.d("drawWidgetListYear appWidgetId", "" + appWidgetId);
+    private void drawWidgetListYear(Context context, int appWidgetId, short appWidgetSeqNo) {
+        //Log.d("drawWidgetListYear appWidgetId", "" + appWidgetId);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetId, 1));
-        cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetId, cal.get(Calendar.MONTH)));
-        cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetId, cal.get(Calendar.YEAR)));
+        cal.set(Calendar.DATE, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_DATE + appWidgetSeqNo, 1));
+        cal.set(Calendar.MONTH, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_MONTH + appWidgetSeqNo, cal.get(Calendar.MONTH)));
+        cal.set(Calendar.YEAR, sharedPrefs.getInt(CalendarThaiAction.WIDGET_PREF_YEAR + appWidgetSeqNo, cal.get(Calendar.YEAR)));
 
         RemoteViews rv_activity_calendar_thai;
         rv_activity_calendar_thai = new RemoteViews(context.getPackageName(), R.layout.activity_calendar_thai);
@@ -782,10 +804,10 @@ public class CalendarThaiWidget extends AppWidgetProvider {
         int beginYear = CalendarUtils.getYearTh(cal.get(Calendar.YEAR)) - roundOfYear;
         int toYear = CalendarUtils.getYearTh(cal.get(Calendar.YEAR));
 
-//        Log.d("colOfYear",""+colOfYear);
-//        Log.d("roundOfYear",""+roundOfYear);
-//        Log.d("beginYear",""+beginYear);
-//        Log.d("toYear",""+toYear);
+        //Log.d("colOfYear",""+colOfYear);
+        //Log.d("roundOfYear",""+roundOfYear);
+        //Log.d("beginYear",""+beginYear);
+        //Log.d("toYear",""+toYear);
 
         //month bar
         RemoteViews rv_row_month_bar = new RemoteViews(context.getPackageName(), R.layout.row_month_bar);
@@ -806,10 +828,11 @@ public class CalendarThaiWidget extends AppWidgetProvider {
                 }
                 //btn control
                 rv_cell_month.setOnClickPendingIntent(R.id.layCellYearContainer,
-                        PendingIntent.getBroadcast(context, Integer.parseInt(appWidgetId + "" + CalendarUtils.getYearEn(beginYear)),
+                        PendingIntent.getBroadcast(context, Integer.parseInt(appWidgetSeqNo + String.valueOf(CalendarUtils.getYearEn(beginYear))),
                                 new Intent(context, getClass())
                                         .setAction(CalendarThaiAction.ACTION_LIST_MONTH)
                                         .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                        .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo)
                                         .putExtra(CalendarThaiAction.EXTRA_YEAR_DETAIL, CalendarUtils.getYearEn(beginYear))
                                 ,
                                 PendingIntent.FLAG_UPDATE_CURRENT));
@@ -825,10 +848,11 @@ public class CalendarThaiWidget extends AppWidgetProvider {
         //btn control
         if(cal.get(Calendar.YEAR) > context.getResources().getInteger(R.integer.CAL_YEAR_MIN)) {
             rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvPrevMonth,
-                    PendingIntent.getBroadcast(context, appWidgetId,
+                    PendingIntent.getBroadcast(context, appWidgetSeqNo,
                             new Intent(context, getClass())
                                     .setAction(CalendarThaiAction.ACTION_PREVIOUS_YEAR_GROUP)
                                     .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                    .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo)
                                     .putExtra(CalendarThaiAction.WIDGET_NUM_YEAR_GROUP, numOfYear),
                             PendingIntent.FLAG_UPDATE_CURRENT));
         }else{
@@ -836,27 +860,30 @@ public class CalendarThaiWidget extends AppWidgetProvider {
         }
         if(cal.get(Calendar.YEAR) < context.getResources().getInteger(R.integer.CAL_YEAR_MAX)) {
             rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvNextMonth,
-                    PendingIntent.getBroadcast(context, appWidgetId,
+                    PendingIntent.getBroadcast(context, appWidgetSeqNo,
                             new Intent(context, getClass())
                                     .setAction(CalendarThaiAction.ACTION_NEXT_YEAR_GROUP)
                                     .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                    .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo)
                                     .putExtra(CalendarThaiAction.WIDGET_NUM_YEAR_GROUP, numOfYear),
                             PendingIntent.FLAG_UPDATE_CURRENT));
         }else{
             rv_activity_calendar_thai.setViewVisibility(R.id.tvNextMonth, View.INVISIBLE);
         }
         rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvCurrMonth,
-                PendingIntent.getBroadcast(context, appWidgetId,
+                PendingIntent.getBroadcast(context, appWidgetSeqNo,
                         new Intent(context, getClass())
                                 .setAction(CalendarThaiAction.ACTION_RESET_MONTH)
-                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
                         PendingIntent.FLAG_UPDATE_CURRENT));
 
 //        rv_activity_calendar_thai.setOnClickPendingIntent(R.id.tvTitleMonth,
-//                PendingIntent.getBroadcast(context, appWidgetId,
+//                PendingIntent.getBroadcast(context, appWidgetSeqNo,
 //                        new Intent(context, getClass())
 //                                .setAction(CalendarThaiAction.ACTION_LIST_DAY)
-//                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+//                                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+//                                .putExtra(CalendarThaiAction.APPWIDGET_SEQNO, appWidgetSeqNo),
 //                        PendingIntent.FLAG_UPDATE_CURRENT));
 
         appWidgetManager.updateAppWidget(appWidgetId, rv_activity_calendar_thai);

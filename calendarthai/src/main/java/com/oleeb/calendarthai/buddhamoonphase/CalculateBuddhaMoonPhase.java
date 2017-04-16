@@ -33,22 +33,22 @@ public class CalculateBuddhaMoonPhase {
 
     @SuppressLint("LongLogTag")
     public Object[] getCalMoonPhase(Context context, int year, int month, int day){
-//        Log.d("CalculateBuddhaMoonPhase", "getBuddhaMoonPhaseDB() int year, int month, int day=" + year + ", " + month + ", " + day);
-//        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCBeginDate:"+sCBeginDate.getTime());
-//        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCEndDate:"+sCEndDate.getTime());
-//        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCCurentDate:"+sCCurentDate.getTime());
+//        //Log.d("CalculateBuddhaMoonPhase", "getBuddhaMoonPhaseDB() int year, int month, int day=" + year + ", " + month + ", " + day);
+//        //Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCBeginDate:"+sCBeginDate.getTime());
+//        //Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCEndDate:"+sCEndDate.getTime());
+//        //Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCCurentDate:"+sCCurentDate.getTime());
         Object[] data = null;
         int countDay = 0;
         boolean hasData = false;
         sCCurentDate.set(year, month, day, 0, 0, 0);
 
         if (sCBeginDate.before(sCCurentDate) && sCCurentDate.before(sCEndDate)) {
-//            Log.d("CalculateBuddhaMoonPhase","---------------------------------"+year);
+//            //Log.d("CalculateBuddhaMoonPhase","---------------------------------"+year);
         }else if(sCBeginDate.before(sCCurentDate) && sCEndDate.before(sCCurentDate)){
-//            Log.d("CalculateBuddhaMoonPhase","+++++++++++++++++++++++++++++++++"+year);
+//            //Log.d("CalculateBuddhaMoonPhase","+++++++++++++++++++++++++++++++++"+year);
             getBuddhaMoonPhaseDB(context, ++year);
         }else{
-//            Log.d("CalculateBuddhaMoonPhase","*********************************"+year);
+//            //Log.d("CalculateBuddhaMoonPhase","*********************************"+year);
             getBuddhaMoonPhaseDB(context, year);
         }
 
@@ -56,17 +56,17 @@ public class CalculateBuddhaMoonPhase {
             countDay = getDaysBetween(sCBeginDate, sCCurentDate);
             data = calPhaseofYear(countDay);
         }
-//        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCBeginDate:"+sCBeginDate.getTime());
-//        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCEndDate:"+sCEndDate.getTime());
-//        Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCCurentDate:"+sCCurentDate.getTime());
-//        Log.d("CalculateBuddhaMoonPhase countDay:",""+countDay);
-//        Log.d("CalculateBuddhaMoonPhase data:",data[1]+","+data[3]);
+//        //Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCBeginDate:"+sCBeginDate.getTime());
+//        //Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCEndDate:"+sCEndDate.getTime());
+//        //Log.d("CalculateBuddhaMoonPhase","getCalMoonPhase() sCCurentDate:"+sCCurentDate.getTime());
+//        //Log.d("CalculateBuddhaMoonPhase countDay:",""+countDay);
+//        //Log.d("CalculateBuddhaMoonPhase data:",data[1]+","+data[3]);
         return data;
     }
 
     @SuppressLint("LongLogTag")
     private void getBuddhaMoonPhaseDB(Context context,int year){
-//        Log.d("CalculateBuddhaMoonPhase","getBuddhaMoonPhaseDB() year="+year);
+//        //Log.d("CalculateBuddhaMoonPhase","getBuddhaMoonPhaseDB() year="+year);
 //        sCurentBaseYear = 2014;
 //        sPhaseOfYaer = 1;
 //        sCBeginDate.set(2013, 11, 3);

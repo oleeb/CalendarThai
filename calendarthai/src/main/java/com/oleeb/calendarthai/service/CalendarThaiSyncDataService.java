@@ -18,7 +18,7 @@ public class CalendarThaiSyncDataService extends Service {
 
         @Override
         public void onCreate() {
-            Log.d(this.getClass().getName(), "services start");
+            //Log.d(this.getClass().getName(), "services start");
             super.onCreate();
             CalendarThaiSyncData calendarThaiSyncData = new CalendarThaiSyncData(this);
             Thread thread = new Thread(calendarThaiSyncData, "CalendarThaiSyncData");

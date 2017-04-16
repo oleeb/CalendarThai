@@ -41,7 +41,7 @@ public class CalendarThaiAsyncTask extends AsyncTask<String, Integer, Bitmap> {
      * delivers it the parameters given to AsyncTask.execute() */
     @Override
     protected Bitmap doInBackground(String... params) {
-        Log.d(CalendarThaiAsyncTask.class.getName(),"doInBackground params"+params);
+        //Log.d(CalendarThaiAsyncTask.class.getName(),"doInBackground params"+params);
         CalendarThaiSyncData calendarThaiSyncData = new CalendarThaiSyncData(this.context);
         calendarThaiSyncData.run();
         return null;

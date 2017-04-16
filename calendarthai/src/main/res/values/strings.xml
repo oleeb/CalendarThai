@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">CalendarThai</string>
-    <string name="app_version">v.1</string>
+    <string name="app_version">beta v. 3</string>
 
     <string name="calendarthai_settings">CalendarThai Settings</string>
     <string name="txt_ok">ตกลง</string>
@@ -8,6 +8,9 @@
 
     <string name="txt_settings">ตั้งค่า</string>
     <string name="txt_refresh">ดาวน์โหลดข้อมูลใหม่</string>
+
+    <string name="txt_please_wait_download">โปรดรอสักครู่ กำลังดาวน์โหลด...</string>
+    <string name="txt_download_complete">ดาวน์โหลดเสร็จสมบูณร์</string>
 
     <string name="txt_year_BC">พ.ศ.</string>
 
